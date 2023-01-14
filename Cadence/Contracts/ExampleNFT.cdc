@@ -1,9 +1,20 @@
+/* 
+*
+*  This is an example implementation of a Flow Non-Fungible Token
+*  It is not part of the official standard but it assumed to be
+*  similar to how many NFTs would implement the core functionality.
+*
+*  This contract does not implement any sophisticated classification
+*  system for its NFTs. It defines a simple NFT with minimal metadata.
+*   
+*/
+
 import NonFungibleToken from "./NonFungibleToken.cdc"
 import MetadataViews from "./MetadataViews.cdc"
 
 pub contract ExampleNFT: NonFungibleToken {
 
-    /// Total supply of ExampleNFTs in existence (Numero di NFT totali)
+    /// Total supply of ExampleNFTs in existence
     pub var totalSupply: UInt64
 
     /// The event that is emitted when the contract is created
@@ -33,11 +44,7 @@ pub contract ExampleNFT: NonFungibleToken {
         pub let name: String
         pub let description: String
         pub let thumbnail: String
-        
-        // diritti d'autore
         access(self) let royalties: [MetadataViews.Royalty]
-        
-        // 
         access(self) let metadata: {String: AnyStruct}
     
         init(
@@ -347,42 +354,4 @@ pub contract ExampleNFT: NonFungibleToken {
         emit ContractInitialized()
     }
 }
-
-
-// import NonFungibleToken from "./NonFungibleToken.cdc"
-// import MetadataViews from "./MetadataViews.cdc"
-// pub contract Player {
-    
-//     // Declare the PlayerNFT resource
-//     pub resource PlayerNFT {
-
-//         pub let id: UInt64
-
-//         pub var name:  String
-
-//         init(initID: UInt64, playerName: String){
-//             self.id = initID
-//             self.name = playerName
-//         }
-
-//         pub fun getName(): String {    
-//             return self.name
-//         }
-
-//         pub fun getId(): UInt64 {
-//             return self.id
-//         }
-        
-//     }
-
-//     // function to create a player NFT
-//     pub fun createPlayer(initID: UInt64, playerName: String): @PlayerNFT{
-//         return <- create PlayerNFT(initID: initID, playerName: playerName)
-//     }
-
-//     // function to initialize the contract
-//     init(name: String){
-//         self.account.save<@PlayerNFT>(<-create PlayerNFT(initID: 1, playerName: name), to: /storage/PlayerNFT)
-//     }
-
-// }
+ 

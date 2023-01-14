@@ -14,6 +14,24 @@
 			"address": "f8d6e0586b0a20c7",
 			"key": "6dc59a692e47895cf8c142803e4e8ba1c6869d76ba469b89e8f1b724ceec7196"
 		}
+	},
+	"contracts": {
+		"NonFungibleToken": "./Cadence/Contracts/NonFungibleToken.cdc",
+		"MetadataViews": "./Cadence/Contracts/MetadataViews.cdc",
+		"ExampleNFT": "./Cadence/Contracts/ExampleNFT.cdc",
+		"FungibleToken": "./Cadence/Contracts/Utility/FungibleToken.cdc",
+		"NFTForwarding": "./Cadence/Contracts/Utility/NFTForwarding.cdc"
+	},
+	"deployments": {
+		"emulator": {
+			"emulator-account": [
+				"NonFungibleToken",
+				"ExampleNFT",
+				"MetadataViews",
+				"FungibleToken",
+				"NFTForwarding"
+			]
+		}
 	}
 }
  
