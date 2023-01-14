@@ -6,9 +6,14 @@
 		"testnet": "access.devnet.nodes.onflow.org:9000"
 	},
 	"accounts": {
+		"Moli": {
+			"address": "01cf0e2f2f715450",
+			"key": "bfb8c4b360af800307ae58cae742f0f2e2d99b9bda392154666084861715d081"
+		},
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
 			"key": "6dc59a692e47895cf8c142803e4e8ba1c6869d76ba469b89e8f1b724ceec7196"
 		}
 	}
 }
+ 
