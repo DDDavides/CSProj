@@ -6,6 +6,10 @@
 		"testnet": "access.devnet.nodes.onflow.org:9000"
 	},
 	"accounts": {
+		"Alice": {
+			"address": "01cf0e2f2f715450",
+			"key": "5c72b3b673c81c1b479e2b793704f10b2a941af1366908f349a39b2fa8315c12"
+		},
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
 			"key": "6dc59a692e47895cf8c142803e4e8ba1c6869d76ba469b89e8f1b724ceec7196"
