@@ -8,7 +8,6 @@
 *  system for its NFTs. It defines a simple NFT with minimal metadata.
 *   
 */
-
 import NonFungibleToken from "./NonFungibleToken.cdc"
 import MetadataViews from "./MetadataViews.cdc"
 
@@ -354,4 +353,3 @@ pub contract ExampleNFT: NonFungibleToken {
         emit ContractInitialized()
     }
 }
- 
