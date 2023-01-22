@@ -1,6 +1,5 @@
 import NonFungibleToken from "../Contracts/NonFungibleToken.cdc"
 import ExampleNFT from "../Contracts/ExampleNFT.cdc"
-import NFTForwarding from "../Contracts/utility/NFTForwarding.cdc"
 
 /// This transaction is what an account would run
 /// to unlink its collection from public storage

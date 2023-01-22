@@ -14,7 +14,7 @@ transaction(
     thumbnail: String,
     cuts: [UFix64],
     royaltyDescriptions: [String],
-    royaltyBeneficiaries: [Address] 
+    // royaltyBeneficiaries: [Address] 
 ) {
 
     /// local variable for storing the minter reference
@@ -41,31 +41,31 @@ transaction(
     }
 
     pre {
-        cuts.length == royaltyDescriptions.length && cuts.length == royaltyBeneficiaries.length: "Array length should be equal for royalty related details"
+        // cuts.length == royaltyDescriptions.length && cuts.length == royaltyBeneficiaries.length: "Array length should be equal for royalty related details"
     }
 
     execute {
 
         // Create the royalty details
         var count = 0
-        var royalties: [MetadataViews.Royalty] = []
-        while royaltyBeneficiaries.length > count {
-            let beneficiary = royaltyBeneficiaries[count]
-            let beneficiaryCapability = getAccount(beneficiary)
-            .getCapability<&{FungibleToken.Receiver}>(MetadataViews.getRoyaltyReceiverPublicPath())
+        // var royalties: [MetadataViews.Royalty] = []
+        // while royaltyBeneficiaries.length > count {
+        //     let beneficiary = royaltyBeneficiaries[count]
+        //     let beneficiaryCapability = getAccount(beneficiary)
+        //     .getCapability<&{FungibleToken.Receiver}>(MetadataViews.getRoyaltyReceiverPublicPath())
 
-            // Make sure the royalty capability is valid before minting the NFT
-            if !beneficiaryCapability.check() { panic("Beneficiary capability is not valid!") }
+        //     // Make sure the royalty capability is valid before minting the NFT
+        //     if !beneficiaryCapability.check() { panic("Beneficiary capability is not valid!") }
 
-            royalties.append(
-                MetadataViews.Royalty(
-                    receiver: beneficiaryCapability,
-                    cut: cuts[count],
-                    description: royaltyDescriptions[count]
-                )
-            )
-            count = count + 1
-        }
+        //     royalties.append(
+        //         MetadataViews.Royalty(
+        //             receiver: beneficiaryCapability,
+        //             cut: cuts[count],
+        //             description: royaltyDescriptions[count]
+        //         )
+        //     )
+        //     count = count + 1
+        // }
 
 
 
@@ -75,7 +75,7 @@ transaction(
             name: name,
             description: description,
             thumbnail: thumbnail,
-            royalties: royalties
+            royalties: []
         )
     }
 

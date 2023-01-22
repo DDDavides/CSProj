@@ -1,4 +1,11 @@
 {
+	"contracts": {
+		"ExampleNFT": "./Cadence/Contracts/ExampleNFT.cdc",
+		"FlowToken": "./Cadence/Contracts/Utility/FlowToken.cdc",
+		"FungibleToken": "./Cadence/Contracts/Utility/FungibleToken.cdc",
+		"MetadataViews": "./Cadence/Contracts/MetadataViews.cdc",
+		"NonFungibleToken": "./Cadence/Contracts/NonFungibleToken.cdc"
+	},
 	"networks": {
 		"emulator": "127.0.0.1:3569",
 		"mainnet": "access.mainnet.nodes.onflow.org:9000",
@@ -8,19 +15,12 @@
 	"accounts": {
 		"Alice": {
 			"address": "01cf0e2f2f715450",
-			"key": "5c72b3b673c81c1b479e2b793704f10b2a941af1366908f349a39b2fa8315c12"
+			"key": "0644463241c1566c147d8eb5b4a447d5fb989f5f0688b79ab18b087235cbc9c5"
 		},
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
 			"key": "6dc59a692e47895cf8c142803e4e8ba1c6869d76ba469b89e8f1b724ceec7196"
 		}
-	},
-	"contracts": {
-		"NonFungibleToken": "./Cadence/Contracts/NonFungibleToken.cdc",
-		"MetadataViews": "./Cadence/Contracts/MetadataViews.cdc",
-		"ExampleNFT": "./Cadence/Contracts/ExampleNFT.cdc",
-		"FungibleToken": "./Cadence/Contracts/Utility/FungibleToken.cdc",
-		"NFTForwarding": "./Cadence/Contracts/Utility/NFTForwarding.cdc"
 	},
 	"deployments": {
 		"emulator": {
@@ -28,10 +28,8 @@
 				"NonFungibleToken",
 				"ExampleNFT",
 				"MetadataViews",
-				"FungibleToken",
-				"NFTForwarding"
+				"FungibleToken"
 			]
 		}
 	}
 }
- 
