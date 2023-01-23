@@ -14,3 +14,19 @@
     -deploy project
     -send signed transactions
 -Fare riferimenti a crypto kitties
+
+-Vendita di NFT con FT:
+    -evitare che quando si mette in vendita si perda l'NFT, finchè non viene venduto si ha il possesso ancora
+    -ogni utente elenca una lista di vendite dal proprio account anzichè avere un approccio centralizzato
+    -ogni utente possiede risorsa SaleCollection che ha:
+        -collezione di NFT dell'owner da cui andare a prendere gli NFT da vendere
+        -dizionario di prezzi degli NFT da vendere
+        -vault dell'owner dove andare a depositare i soldi una volta venduto l'NFT
+        con le seguenti funzioni:
+            -cancelSale per eliminare la vendita di un NFT
+            -listForSale che elenca tutti gli NFT in vendita in quella collezione
+            -changePrice per cambiare il prezzo a un NFT che è in vendita
+            -purchase che permette di acquistare da parte di un esterno recipient con dei 
+            buytokens un NFT in vendita in quella collezione
+            -idPrice per avere il prezzo di un singolo NFT da parametor
+            -getIDs per ottenere tutti i prezzi degli NFT in vendita

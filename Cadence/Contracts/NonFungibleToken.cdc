@@ -176,6 +176,8 @@ pub contract interface NonFungibleToken {
         ///
         pub fun getIDs(): [UInt64]
 
+        pub fun idExists(id: UInt64): Bool
+
         /// Returns a borrowed reference to an NFT in the collection
         /// so that the caller can read data and call methods from it
         ///

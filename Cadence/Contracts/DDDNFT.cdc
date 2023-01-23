@@ -213,6 +213,10 @@ pub contract DDDNFT: NonFungibleToken {
             return self.ownedNFTs.keys
         }
 
+        pub fun idExists(id: UInt64): Bool {
+            return self.ownedNFTs.keys.contains(id)
+        }
+
         /// Gets a reference to an NFT in the collection so that 
         /// the caller can read its metadata and call its methods
         ///
