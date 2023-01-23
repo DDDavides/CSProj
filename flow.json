@@ -1,10 +1,11 @@
 {
 	"contracts": {
 		"DDDNFT": "./Cadence/Contracts/DDDNFT.cdc",
-		"FlowToken": "./Cadence/Contracts/Utility/FlowToken.cdc",
 		"FungibleToken": "./Cadence/Contracts/Utility/FungibleToken.cdc",
 		"MetadataViews": "./Cadence/Contracts/MetadataViews.cdc",
-		"NonFungibleToken": "./Cadence/Contracts/NonFungibleToken.cdc"
+		"NonFungibleToken": "./Cadence/Contracts/NonFungibleToken.cdc",
+		"FlowToken": "./Cadence/Contracts/Utility/FlowToken.cdc",
+		"FungibleTokenMetadataViews": "./Cadence/Contracts/Utility/FungibleTokenMetadataViews.cdc"
 	},
 	"networks": {
 		"emulator": "127.0.0.1:3569",
@@ -26,10 +27,11 @@
 		"emulator": {
 			"emulator-account": [
 				"DDDNFT",
-				"FlowToken",
 				"FungibleToken",
 				"MetadataViews",
-				"NonFungibleToken"
+				"NonFungibleToken",
+				"FlowToken",
+				"FungibleTokenMetadataViews"
 			]
 		}
 	}
