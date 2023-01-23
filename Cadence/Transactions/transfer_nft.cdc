@@ -1,5 +1,5 @@
 import NonFungibleToken from "../Contracts/NonFungibleToken.cdc"
-import ExampleNFT from "../Contracts/ExampleNFT.cdc"
+import DDDNFT from "../Contracts/DDDNFT.cdc"
 
 /// This transaction is for transferring and NFT from
 /// one account to another
@@ -7,7 +7,7 @@ import ExampleNFT from "../Contracts/ExampleNFT.cdc"
 transaction(recipient: Address, withdrawID: UInt64) {
 
     /// Reference to the withdrawer's collection
-    let withdrawRef: &ExampleNFT.Collection
+    let withdrawRef: &DDDNFT.Collection
 
     /// Reference of the collection to deposit the NFT to
     let depositRef: &{NonFungibleToken.CollectionPublic}
@@ -15,7 +15,7 @@ transaction(recipient: Address, withdrawID: UInt64) {
     prepare(signer: AuthAccount) {
         // borrow a reference to the signer's NFT collection
         self.withdrawRef = signer
-            .borrow<&ExampleNFT.Collection>(from: ExampleNFT.CollectionStoragePath)
+            .borrow<&DDDNFT.Collection>(from: DDDNFT.CollectionStoragePath)
             ?? panic("Account does not store an object at the specified path")
 
         // get the recipients public account object
@@ -23,7 +23,7 @@ transaction(recipient: Address, withdrawID: UInt64) {
 
         // borrow a public reference to the receivers collection
         self.depositRef = recipient
-            .getCapability(ExampleNFT.CollectionPublicPath)
+            .getCapability(DDDNFT.CollectionPublicPath)
             .borrow<&{NonFungibleToken.CollectionPublic}>()
             ?? panic("Could not borrow a reference to the receiver's collection")
 

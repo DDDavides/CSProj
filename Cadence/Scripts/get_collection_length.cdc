@@ -1,11 +1,11 @@
 import NonFungibleToken from "../Contracts/NonFungibleToken.cdc"
-import ExampleNFT from "../Contracts/ExampleNFT.cdc"
+import DDDNFT from "../Contracts/DDDNFT.cdc"
 
 pub fun main(address: Address): Int {
     let account = getAccount(address)
 
     let collectionRef = account
-        .getCapability(ExampleNFT.CollectionPublicPath)
+        .getCapability(DDDNFT.CollectionPublicPath)
         .borrow<&{NonFungibleToken.CollectionPublic}>()
         ?? panic("Could not borrow capability from public collection")
     

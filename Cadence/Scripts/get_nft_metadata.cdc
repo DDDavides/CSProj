@@ -1,4 +1,4 @@
-import ExampleNFT from "../Contracts/ExampleNFT.cdc"
+import DDDNFT from "../Contracts/DDDNFT.cdc"
 import MetadataViews from "../Contracts/MetadataViews.cdc"
 
 /// This script gets all the view-based metadata associated with the specified NFT
@@ -87,11 +87,11 @@ pub fun main(address: Address, id: UInt64): NFT {
     let account = getAccount(address)
 
     let collection = account
-        .getCapability(ExampleNFT.CollectionPublicPath)
-        .borrow<&{ExampleNFT.ExampleNFTCollectionPublic}>()
+        .getCapability(DDDNFT.CollectionPublicPath)
+        .borrow<&{DDDNFT.DDDNFTCollectionPublic}>()
         ?? panic("Could not borrow a reference to the collection")
 
-    let nft = collection.borrowExampleNFT(id: id)!
+    let nft = collection.borrowDDDNFT(id: id)!
 
     // Get the basic display information for this NFT
     let display = MetadataViews.getDisplay(nft)!

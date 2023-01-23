@@ -1,5 +1,5 @@
-import ExampleNFT from "../Contracts/ExampleNFT.cdc"
+import DDDNFT from "../Contracts/DDDNFT.cdc"
 
 pub fun main(): UInt64 {
-    return ExampleNFT.totalSupply
+    return DDDNFT.totalSupply
 }
