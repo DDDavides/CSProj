@@ -1,6 +1,6 @@
 {
 	"contracts": {
-		"ExampleNFT": "./Cadence/Contracts/ExampleNFT.cdc",
+		"DDDNFT": "./Cadence/Contracts/DDDNFT.cdc",
 		"FlowToken": "./Cadence/Contracts/Utility/FlowToken.cdc",
 		"FungibleToken": "./Cadence/Contracts/Utility/FungibleToken.cdc",
 		"MetadataViews": "./Cadence/Contracts/MetadataViews.cdc",
@@ -25,10 +25,11 @@
 	"deployments": {
 		"emulator": {
 			"emulator-account": [
-				"NonFungibleToken",
-				"ExampleNFT",
+				"DDDNFT",
+				"FlowToken",
+				"FungibleToken",
 				"MetadataViews",
-				"FungibleToken"
+				"NonFungibleToken"
 			]
 		}
 	}
