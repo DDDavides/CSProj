@@ -18,6 +18,10 @@
 			"address": "01cf0e2f2f715450",
 			"key": "2c6bf1d9f520957174076df26a11456f93845a5f2bca06848fcd8ce0b2f520c5"
 		},
+		"Bob": {
+			"address": "179b6b1cb6755e31",
+			"key": "083e4d411a4b43055712c064de8bcc4d843398900d615af8d95dc6bd1de7af27"
+		},
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
 			"key": "6dc59a692e47895cf8c142803e4e8ba1c6869d76ba469b89e8f1b724ceec7196"
