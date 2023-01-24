@@ -15,6 +15,10 @@
     -send signed transactions
 -Fare riferimenti a crypto kitties
 
+concetti:
+    -prepare di una transazione è dove ha full access all'account che l'ha firmata e dove 
+    memorizzati e rimossi e usate per creare capabilities le risorse
+
 -Vendita di NFT con FT:
     -evitare che quando si mette in vendita si perda l'NFT, finchè non viene venduto si ha il possesso ancora
     -ogni utente elenca una lista di vendite dal proprio account anzichè avere un approccio centralizzato
@@ -30,3 +34,17 @@
             buytokens un NFT in vendita in quella collezione
             -idPrice per avere il prezzo di un singolo NFT da parametor
             -getIDs per ottenere tutti i prezzi degli NFT in vendita
+
+    -transazione create_sale:
+        -ottiene i riferimenti alla collezione da voler linkare per la vendita e al
+        vault in cui poter ricevere i soldi
+        -crea o ottiene un riferimento a una SaleCollection e la linka con una capability
+        -invoca il meto listForSale per il token passato come parametro al prezzo desiderato
+
+    -transazione purchase_nft:
+        -nel prepare prende dall'account che firma la capability della collezione
+            poi si prende il riferimento al vault dell'account che deve pagare e poi prende dall'account
+            owner del token la SaleCollection e controlla che sia presente il token andandosi a prendere 
+            il price e infine ritira i soldi dal vaultref
+        -nell'execute invoca il metodo purchase per quel token inviandolo a quel ricevente con la capability 
+            alla collection da cui prendere il token

@@ -10,6 +10,9 @@ pub contract DDDMarketplace {
     pub event TokenPurchased(id: UInt64, price: UFix64, seller: Address?, buyer: Address?)
     pub event SaleCanceled(id: UInt64, seller: Address?)
 
+    pub let SaleCollectionPublicPath: PublicPath
+    pub let SaleCollectionStoragePath: StoragePath
+
     // Interface that exposes the public
     // methods of the sale
     pub resource interface SalePublic {
@@ -123,5 +126,10 @@ pub contract DDDMarketplace {
     pub fun createSaleCollection(ownerCollection: Capability<&NonFungibleToken.Collection>,
                                  ownerVault: Capability<&AnyResource{FungibleToken.Receiver}>): @SaleCollection {
         return <- create SaleCollection(ownerCollection: ownerCollection, ownerVault: ownerVault)
+    }
+
+     init () {
+        self.SaleCollectionStoragePath = /storage/SaleCollection
+        self.SaleCollectionPublicPath = /public/SaleCollection
     }
 }

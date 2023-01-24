@@ -26,6 +26,10 @@ pub contract FlowToken: FungibleToken {
     // Event that is emitted when a new burner resource is created
     pub event BurnerCreated()
 
+    /// Storage and Public Paths
+    pub let VaultStoragePath: StoragePath
+    pub let VaultReceiverPublicPath: PublicPath
+
     // Vault
     //
     // Each user stores an instance of only the Vault in their storage
@@ -167,18 +171,20 @@ pub contract FlowToken: FungibleToken {
 
     init(adminAccount: AuthAccount) {
         self.totalSupply = 0.0
+        self.VaultStoragePath = /storage/flowTokenVault
+        self.VaultReceiverPublicPath = /public/flowTokenReceiver
 
         // Create the Vault with the total supply of tokens and save it in storage
         //
         let vault <- create Vault(balance: self.totalSupply)
-        adminAccount.save(<-vault, to: /storage/flowTokenVault)
+        adminAccount.save(<-vault, to: self.VaultStoragePath)
 
         // Create a public capability to the stored Vault that only exposes
         // the `deposit` method through the `Receiver` interface
         //
         adminAccount.link<&FlowToken.Vault{FungibleToken.Receiver}>(
-            /public/flowTokenReceiver,
-            target: /storage/flowTokenVault
+            self.VaultReceiverPublicPath,
+            target: self.VaultStoragePath
         )
 
         // Create a public capability to the stored Vault that only exposes
@@ -186,7 +192,7 @@ pub contract FlowToken: FungibleToken {
         //
         adminAccount.link<&FlowToken.Vault{FungibleToken.Balance}>(
             /public/flowTokenBalance,
-            target: /storage/flowTokenVault
+            target: self.VaultStoragePath
         )
 
         let admin <- create Administrator()
