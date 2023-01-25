@@ -25,7 +25,7 @@ pub fun getOrCreateSaleCollection(account: AuthAccount, ownerCollection: Capabil
 transaction(tokenID: UInt64, price: UFix64) {
 
     prepare(acct: AuthAccount) {
-
+        
         let receiver = acct.getCapability<&{FungibleToken.Receiver}>(FlowToken.VaultReceiverPublicPath)
         let collectionCapability = acct.getCapability<&DDDNFT.Collection>(DDDNFT.CollectionPublicPath)
         
