@@ -3,6 +3,7 @@
 		"DDDNFT": "./Cadence/Contracts/DDDNFT.cdc",
 		"FlowToken": "./Cadence/Contracts/Utility/FlowToken.cdc",
 		"FungibleToken": "./Cadence/Contracts/Utility/FungibleToken.cdc",
+		"FungibleTokenMetadataViews": "./Cadence/Contracts/Utility/FungibleTokenMetadataViews.cdc",
 		"MetadataViews": "./Cadence/Contracts/MetadataViews.cdc",
 		"NonFungibleToken": "./Cadence/Contracts/NonFungibleToken.cdc"
 	},
@@ -15,7 +16,11 @@
 	"accounts": {
 		"Alice": {
 			"address": "01cf0e2f2f715450",
-			"key": "0644463241c1566c147d8eb5b4a447d5fb989f5f0688b79ab18b087235cbc9c5"
+			"key": "2c6bf1d9f520957174076df26a11456f93845a5f2bca06848fcd8ce0b2f520c5"
+		},
+		"Bob": {
+			"address": "179b6b1cb6755e31",
+			"key": "083e4d411a4b43055712c064de8bcc4d843398900d615af8d95dc6bd1de7af27"
 		},
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
@@ -26,10 +31,11 @@
 		"emulator": {
 			"emulator-account": [
 				"DDDNFT",
-				"FlowToken",
 				"FungibleToken",
 				"MetadataViews",
-				"NonFungibleToken"
+				"NonFungibleToken",
+				"FlowToken",
+				"FungibleTokenMetadataViews"
 			]
 		}
 	}

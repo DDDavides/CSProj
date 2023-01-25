@@ -1,14 +1,15 @@
 # CSProj
-Progetto del corso di Cybersecurity
+Progetto del corso magistrale di Cybersecurity
 
 # Prerequisiti
 Prerequisiti per far funzionare il sistema
-* sistema unix
-* flow cli 
+* Sistema Unixn (per i cmandi shell)
+* Flow CLI
 
 # Esecuzione
-1. start.sh
-2. Aprire una nuova finestra e lavorare con flow CLI:
+1. start.sh (bloccante)
+2. Aprire una nuova finestra del terminale
+3. Aprire una nuova finestra e lavorare con flow CLI:
     2.a (se non è deployato) flow project deploy
     2.b flow transactions send setup_account --signer <nome account>
     <!-- flow transactions send setup_account_to_receive_royalty /public/GenericFTReceiver -->
