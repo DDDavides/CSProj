@@ -19,7 +19,10 @@ flow transactions send ${transactions}/setup_account.cdc
 ## Mint di un NFT da parte dell'emulatore
 echo "\bMinting di un NFT a carico dell'emulatore.."
 flow transactions send ${transactions}/mint_nft.cdc \
-    f8d6e0586b0a20c7 Prova descrizione thumbnail '[1.0]' '["nulla"]'
+    f8d6e0586b0a20c7 Defender descrizione thumbnail 100.0 4.9 18.0 '[1.0]' '["nulla"]'
+
+flow transactions send ${transactions}/mint_nft.cdc \
+    f8d6e0586b0a20c7 Attacker descrizione thumbnail 20.0 10.5 7.0 '[1.0]' '["nulla"]'
 
 
 ## Per vedere i metadati di un NFT dell'account dell'emulatore

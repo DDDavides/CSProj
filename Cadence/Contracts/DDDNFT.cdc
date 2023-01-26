@@ -28,14 +28,35 @@ pub contract DDDNFT: NonFungibleToken {
         pub let name: String
         pub let description: String
         pub let thumbnail: String
+        
+        /// interactions fields
+        pub var health: UFix64
+        pub let attack: UFix64
+        pub let defence: UFix64
+
+        pub var victories: UInt64 
+        pub var defeats: UInt64
+    
         access(self) let royalties: [MetadataViews.Royalty]
         access(self) let metadata: {String: AnyStruct}
-    
+
+
+        pub fun incrementVictories() {
+            self.victories = self.victories + 1
+        }
+        
+        pub fun incrementDefeats() {
+            self.defeats = self.defeats + 1
+        }
+        
         init(
             id: UInt64,
             name: String,
             description: String,
             thumbnail: String,
+            health: UFix64,
+            attack: UFix64,
+            defence: UFix64,
             royalties: [MetadataViews.Royalty],
             metadata: {String: AnyStruct},
         ) {
@@ -43,6 +64,11 @@ pub contract DDDNFT: NonFungibleToken {
             self.name = name
             self.description = description
             self.thumbnail = thumbnail
+            self.attack = attack
+            self.defence = defence
+            self.health = health
+            self.victories = 0
+            self.defeats = 0
             self.royalties = royalties
             self.metadata = metadata
         }
@@ -284,6 +310,9 @@ pub contract DDDNFT: NonFungibleToken {
             name: String,
             description: String,
             thumbnail: String,
+            health: UFix64,
+            attack: UFix64,
+            defence: UFix64,
             royalties: [MetadataViews.Royalty]
         ) {
             let metadata: {String: AnyStruct} = {}
@@ -298,6 +327,9 @@ pub contract DDDNFT: NonFungibleToken {
                 name: name,
                 description: description,
                 thumbnail: thumbnail,
+                health: health,
+                attack: attack,
+                defence: defence,
                 royalties: royalties,
                 metadata: metadata,
             )
