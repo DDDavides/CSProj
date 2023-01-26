@@ -154,6 +154,7 @@ pub contract DDDNFT: NonFungibleToken {
         pub fun deposit(token: @NonFungibleToken.NFT)
         pub fun getIDs(): [UInt64]
         pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
+        pub fun idExists(id: UInt64): Bool
         pub fun borrowDDDNFT(id: UInt64): &DDDNFT.NFT? {
             post {
                 (result == nil) || (result?.id == id):

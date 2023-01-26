@@ -50,3 +50,8 @@ concetti:
             il price e infine ritira i soldi dal vaultref
         -nell'execute invoca il metodo purchase per quel token inviandolo a quel ricevente con la capability 
             alla collection da cui prendere il token
+-concetti utili flow:
+    -risorsa
+    -proposer: chi propone di fare la transazione
+    -authorizer: chi autorizza la transazione
+    

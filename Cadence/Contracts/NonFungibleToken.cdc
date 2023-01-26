@@ -135,6 +135,7 @@ pub contract interface NonFungibleToken {
         pub fun deposit(token: @NFT)
         pub fun getIDs(): [UInt64]
         pub fun borrowNFT(id: UInt64): &NFT
+        pub fun idExists(id: UInt64): Bool
         /// Safe way to borrow a reference to an NFT that does not panic
         ///
         /// @param id: The ID of the NFT that want to be borrowed

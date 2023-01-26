@@ -7,7 +7,7 @@ pub contract DDDMarketplace {
     //
     pub event ForSale(id: UInt64, price: UFix64, owner: Address?)
     pub event PriceChanged(id: UInt64, newPrice: UFix64, owner: Address?)
-    pub event TokenPurchased(id: UInt64, price: UFix64, seller: Address?, buyer: Address?)
+    pub event TokenPurchased(id: UInt64, price: UFix64, seller: Address?)
     pub event SaleCanceled(id: UInt64, seller: Address?)
 
     pub let SaleCollectionPublicPath: PublicPath
@@ -16,7 +16,7 @@ pub contract DDDMarketplace {
     // Interface that exposes the public
     // methods of the sale
     pub resource interface SalePublic {
-        pub fun purchase(tokenID: UInt64, recipient: Capability<&AnyResource{NonFungibleToken.Receiver}>, buyTokens: @FungibleToken.Vault)
+        pub fun purchase(tokenID: UInt64, buyTokens: @FungibleToken.Vault): @NonFungibleToken.NFT
 	    pub fun idPrice(tokenID: UInt64): UFix64?	        
         pub fun getIDs(): [UInt64] 
     }
@@ -26,7 +26,7 @@ pub contract DDDMarketplace {
     pub resource SaleCollection: SalePublic  {
     
         /// A capability for the owner's collection
-        access(self) var ownerCollection: Capability<&NonFungibleToken.Collection>
+        access(self) var ownerCollection: Capability<&{NonFungibleToken.Provider, NonFungibleToken.CollectionPublic}>
 
         // Dictionary of the prices for each NFT by ID
         access(self) var prices: {UInt64: UFix64}
@@ -36,7 +36,7 @@ pub contract DDDMarketplace {
         // tokens into their account.
         access(account) let ownerVault: Capability<&AnyResource{FungibleToken.Receiver}>
 
-        init (ownerCollection: Capability<&NonFungibleToken.Collection>,
+        init (ownerCollection: Capability<&{NonFungibleToken.Provider, NonFungibleToken.CollectionPublic}>,
               ownerVault: Capability<&AnyResource{FungibleToken.Receiver}>) {
 
             pre {
@@ -80,14 +80,12 @@ pub contract DDDMarketplace {
         }
 
         // purchase lets a user send tokens to purchase an NFT that is for sale
-        pub fun purchase(tokenID: UInt64, recipient: Capability<&AnyResource{NonFungibleToken.Receiver}>, buyTokens: @FungibleToken.Vault) {
+        pub fun purchase(tokenID: UInt64, buyTokens: @FungibleToken.Vault): @NonFungibleToken.NFT {
             pre {
                 self.prices[tokenID] != nil:
                     "No token matching this ID for sale!"
                 buyTokens.balance >= (self.prices[tokenID] ?? 0.0):
                     "Not enough tokens to by the NFT!"
-                recipient.borrow != nil:
-                    "Invalid NFT receiver capability!"
             }
 
             // get the value out of the optional
@@ -101,14 +99,8 @@ pub contract DDDMarketplace {
             // deposit the purchasing tokens into the owners vault
             vaultRef.deposit(from: <-buyTokens)
 
-            // borrow a reference to the object that the receiver capability links to
-            // We can force-cast the result here because it has already been checked in the pre-conditions
-            let receiverReference = recipient.borrow()!
-
-            // deposit the NFT into the buyers collection
-            receiverReference.deposit(token: <-self.ownerCollection.borrow()!.withdraw(withdrawID: tokenID))
-
-            emit TokenPurchased(id: tokenID, price: price, seller: self.owner?.address, buyer: receiverReference.owner?.address)
+            emit TokenPurchased(id: tokenID, price: price, seller: self.owner?.address)
+            return <-self.ownerCollection.borrow()!.withdraw(withdrawID: tokenID)
         }
 
         // idPrice returns the price of a specific token in the sale
@@ -123,7 +115,7 @@ pub contract DDDMarketplace {
     }
 
     // createCollection returns a new collection resource to the caller
-    pub fun createSaleCollection(ownerCollection: Capability<&NonFungibleToken.Collection>,
+    pub fun createSaleCollection(ownerCollection: Capability<&{NonFungibleToken.Provider, NonFungibleToken.CollectionPublic}>,
                                  ownerVault: Capability<&AnyResource{FungibleToken.Receiver}>): @SaleCollection {
         return <- create SaleCollection(ownerCollection: ownerCollection, ownerVault: ownerVault)
     }

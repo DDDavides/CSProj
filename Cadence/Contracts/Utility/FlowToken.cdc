@@ -28,7 +28,9 @@ pub contract FlowToken: FungibleToken {
 
     /// Storage and Public Paths
     pub let VaultStoragePath: StoragePath
-    pub let VaultReceiverPublicPath: PublicPath
+    pub let VaultPublicPath: PublicPath
+    pub let ReceiverPublicPath: PublicPath
+    pub let AdminStoragePath: StoragePath
 
     // Vault
     //
@@ -169,34 +171,33 @@ pub contract FlowToken: FungibleToken {
         }
     }
 
-    init(adminAccount: AuthAccount) {
-        self.totalSupply = 0.0
-        self.VaultStoragePath = /storage/flowTokenVault
-        self.VaultReceiverPublicPath = /public/flowTokenReceiver
+    init() {
+        self.totalSupply = 1000.0
+        self.VaultStoragePath = /storage/exampleTokenVault
+        self.VaultPublicPath = /public/exampleTokenMetadata
+        self.ReceiverPublicPath = /public/exampleTokenReceiver
+        self.AdminStoragePath = /storage/exampleTokenAdmin
 
-        // Create the Vault with the total supply of tokens and save it in storage
-        //
+        // Create the Vault with the total supply of tokens and save it in storage.
         let vault <- create Vault(balance: self.totalSupply)
-        adminAccount.save(<-vault, to: self.VaultStoragePath)
+        self.account.save(<-vault, to: self.VaultStoragePath)
 
-        // Create a public capability to the stored Vault that only exposes
-        // the `deposit` method through the `Receiver` interface
-        //
-        adminAccount.link<&FlowToken.Vault{FungibleToken.Receiver}>(
-            self.VaultReceiverPublicPath,
+        // Create a public capability to the stored Vault that exposes
+        // the `deposit` method through the `Receiver` interface.
+        self.account.link<&FlowToken.Vault{FungibleToken.Receiver}>(
+            self.ReceiverPublicPath,
             target: self.VaultStoragePath
         )
 
         // Create a public capability to the stored Vault that only exposes
-        // the `balance` field through the `Balance` interface
-        //
-        adminAccount.link<&FlowToken.Vault{FungibleToken.Balance}>(
-            /public/flowTokenBalance,
+        // the `balance` field and the `resolveView` method through the `Balance` interface
+        self.account.link<&FlowToken.Vault{FungibleToken.Balance}>(
+            self.VaultPublicPath,
             target: self.VaultStoragePath
         )
 
         let admin <- create Administrator()
-        adminAccount.save(<-admin, to: /storage/flowTokenAdmin)
+        self.account.save(<-admin, to: self.AdminStoragePath)
 
         // Emit an event that shows that the contract was initialized
         emit TokensInitialized(initialSupply: self.totalSupply)
