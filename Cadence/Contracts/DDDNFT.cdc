@@ -41,12 +41,14 @@ pub contract DDDNFT: NonFungibleToken {
         access(self) let metadata: {String: AnyStruct}
 
 
-        pub fun incrementVictories() {
-            self.victories = self.victories + 1
+        pub fun incrementVictories(increment: UInt64) {
+            if increment > 1 { return }
+            self.victories = self.victories + increment
         }
         
-        pub fun incrementDefeats() {
-            self.defeats = self.defeats + 1
+        pub fun incrementDefeats(increment: UInt64) {
+            if increment > 1 { return }
+            self.defeats = self.defeats + increment
         }
         
         init(
