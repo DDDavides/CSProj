@@ -23,7 +23,6 @@ do
     count=$(($count + 1))
 done
 
-
 # File temporaneo per salvare i compilati
 tmp="./tmp"
 
