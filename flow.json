@@ -16,15 +16,19 @@
 	"accounts": {
 		"Alice": {
 			"address": "01cf0e2f2f715450",
-			"key": "2c6bf1d9f520957174076df26a11456f93845a5f2bca06848fcd8ce0b2f520c5"
+			"key": "ee8593ce3e0d442f1f2807a920a0a2ebc8a7f9240aac4187144280b4452cea44"
 		},
 		"Bob": {
 			"address": "179b6b1cb6755e31",
-			"key": "083e4d411a4b43055712c064de8bcc4d843398900d615af8d95dc6bd1de7af27"
+			"key": "45334d9af974a72ea3f6b3b73f28da4d198e9891e62b648893a079f7d222075d"
+		},
+		"Charlie": {
+			"address": "f3fcd2c1a78f5eee",
+			"key": "5a63211a4f3bbc69d2a48915bb67ec4192db01a6d6c976193b6cca6f73ec7b7b"
 		},
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
-			"key": "6dc59a692e47895cf8c142803e4e8ba1c6869d76ba469b89e8f1b724ceec7196"
+			"key": "a26abee3b471f27350b08de70cbd3d6293f53b40a5e815871a61ed7f7c54ba47"
 		}
 	},
 	"deployments": {
