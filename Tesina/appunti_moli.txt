@@ -1,0 +1,57 @@
+-Fare riferimenti al tutorial
+    -resource oriented programming
+        -singola risorsa
+        -collezione di nft
+    -capabilities
+-Fare riferimenti agli standard:
+    -introdotte diverse interfacce per definire diversi livelli di accesso
+    alle funzioni dei singoli elementi: guarda esempio del NonFungibleToken
+    -nft con le sue funzioni:
+        -id
+        -withdraw
+        -deposit
+        -collectionpublic
+-Fare riferimenti alla documentazione ufficiale:
+    -flow.json per le configurazioni
+    -deploy project
+    -send signed transactions
+-Fare riferimenti a crypto kitties
+
+concetti:
+    -prepare di una transazione è dove ha full access all'account che l'ha firmata e dove 
+    memorizzati e rimossi e usate per creare capabilities le risorse
+
+-Vendita di NFT con FT:
+    -evitare che quando si mette in vendita si perda l'NFT, finchè non viene venduto si ha il possesso ancora
+    -ogni utente elenca una lista di vendite dal proprio account anzichè avere un approccio centralizzato
+    -ogni utente possiede risorsa SaleCollection che ha:
+        -collezione di NFT dell'owner da cui andare a prendere gli NFT da vendere
+        -dizionario di prezzi degli NFT da vendere
+        -vault dell'owner dove andare a depositare i soldi una volta venduto l'NFT
+        con le seguenti funzioni:
+            -cancelSale per eliminare la vendita di un NFT
+            -listForSale che elenca tutti gli NFT in vendita in quella collezione
+            -changePrice per cambiare il prezzo a un NFT che è in vendita
+            -purchase che permette di acquistare da parte di un esterno recipient con dei 
+            buytokens un NFT in vendita in quella collezione
+            -idPrice per avere il prezzo di un singolo NFT da parametor
+            -getIDs per ottenere tutti i prezzi degli NFT in vendita
+
+    -transazione create_sale:
+        -ottiene i riferimenti alla collezione da voler linkare per la vendita e al
+        vault in cui poter ricevere i soldi
+        -crea o ottiene un riferimento a una SaleCollection e la linka con una capability
+        -invoca il meto listForSale per il token passato come parametro al prezzo desiderato
+
+    -transazione purchase_nft:
+        -nel prepare prende dall'account che firma la capability della collezione
+            poi si prende il riferimento al vault dell'account che deve pagare e poi prende dall'account
+            owner del token la SaleCollection e controlla che sia presente il token andandosi a prendere 
+            il price e infine ritira i soldi dal vaultref
+        -nell'execute invoca il metodo purchase per quel token inviandolo a quel ricevente con la capability 
+            alla collection da cui prendere il token
+-concetti utili flow:
+    -risorsa
+    -proposer: chi propone di fare la transazione
+    -authorizer: chi autorizza la transazione
+    
