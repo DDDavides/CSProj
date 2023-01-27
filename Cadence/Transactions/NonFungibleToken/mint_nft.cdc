@@ -12,6 +12,9 @@ transaction(
     name: String,
     description: String,
     thumbnail: String,
+    health: UFix64,
+    attack: UFix64,
+    defence: UFix64,
     cuts: [UFix64],
     royaltyDescriptions: [String],
     // royaltyBeneficiaries: [Address] 
@@ -75,6 +78,9 @@ transaction(
             name: name,
             description: description,
             thumbnail: thumbnail,
+            health: health,
+            attack: attack,
+            defence: defence,
             royalties: []
         )
     }
