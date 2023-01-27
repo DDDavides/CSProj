@@ -81,7 +81,7 @@
       {\begin{figure}[h]
         \centering
             \begin{tabular}{m{1cm}c}
-            \includegraphics[scale=0.01]{tesina/img/GitHub-logo.png} & \@github\\
+            \includegraphics[scale=0.01]{img/GitHub-logo.png} & \@github\\
             \end{tabular}
        \end{figure}
       }
