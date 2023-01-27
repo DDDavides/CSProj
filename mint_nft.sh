@@ -15,7 +15,7 @@
 # $9 -> royaltyDescription del NFT                                           #
 ##############################################################################
 
-path="./Cadence/Transactions/mint_nft.cdc"
+path="./Cadence/Transactions/NonFungibleToken/mint_nft.cdc"
 
 echo "Minting NFT..."
 
