@@ -1,8 +1,5 @@
 % Classe appositamente creata per tesi di Ingegneria Informatica all'università Roma Tre
 \documentclass{TesiDiaUniroma3}
-% \setlength{\arrayrulewidth}{0.3mm}
-% \setlength{\tabcolsep}{10pt}
-% \renewcommand{\arraystretch}{1.2}
 % --- INIZIO dati relativi al template TesiDiaUniroma3
 % dati obbligatori, necessari al frontespizio
 \titolo{Flow NFT}
@@ -16,47 +13,26 @@
 % --- FINE dati relativi al template TesiDiaUniroma3
 
 % --- INIZIO richiamo di pacchetti di utilità. Questi sono un esempio e non sono strettamente necessari al modello per la tesi.
-\usepackage{hyperref}	% generazione di collegamenti ipertestuali su indice e riferimenti
-\hypersetup{
-    hidelinks,
-    colorlinks = true,
-    urlcolor = {blu},
-    linkcolor = {black},
-    citecolor = {blue}
-}
 \usepackage[plainpages=false]{hyperref}	% generazione di collegamenti ipertestuali su indice e riferimenti
 \usepackage[all]{hypcap} % per far si che i link ipertestuali alle immagini puntino all'inizio delle stesse e non alla didascalia sottostante
 \usepackage{amsthm}	% per definizioni e teoremi
 \usepackage{amsmath}	% per ``cases'' environment
-% \usepackage{makecell}
-% --- FINE riachiamo di pacchetti di utilità
-% \usepackage{graphicx}
-% \usepackage{subcaption}
-\usepackage{listings}
-% \usepackage[table, dvipsnames]{xcolor}
+% --- FINE richiamo di pacchetti di utilità
 
-% \renewcommand\theadalign{bc}
-% \renewcommand\theadfont{\ttfamily}
-% \renewcommand\theadgape{\Gape[4pt]}
-% \renewcommand\cellgape{\Gape[4pt]}
+\usepackage{listings} % per scrittura di codice
 
-% \lstdefinestyle{report}{
-%   columns=flexible,
-%   % frameshape={}{y}{y}{}, % per rimuovere la linea vericale sulla sinistra `frameshape={}{}{}{}`
-%   % frame=single,
-%   xleftmargin=.2\textwidth, xrightmargin=.2\textwidth,
-%   basicstyle = {\scriptsize \ttfamily},
-%   showstringspaces=false,
-% }
+\usepackage{xcolor}
+\definecolor{bluegray}{rgb}{0.4, 0.6, 0.8}
+\definecolor{coolblack}{rgb}{0.0, 0.18, 0.39}
 
-% \lstdefinestyle{arch}{
-%   columns=flexible,
-%   % frameshape={}{y}{y}{}, % per rimuovere la linea vericale sulla sinistra `frameshape={}{}{}{}`
-%   % frame=single,
-%   xleftmargin=.12\textwidth, xrightmargin=.12\textwidth,
-%   basicstyle = {\scriptsize \ttfamily},
-%   showstringspaces=false,
-% }
+\hypersetup{
+    plainpages=false,
+    hidelinks,
+    colorlinks=true,
+    urlcolor={coolblack},
+    linkcolor={black},
+    citecolor={coolblack}
+}
 
 \begin{document}
 % ----- Pagine di fronespizio, numerate in romano (i,ii,iii,iv...) (obbligatorio)
@@ -73,7 +49,7 @@
 % 2) il nome del file tex (senza estensione) che contiene il capitolo. Tale nome \`e usato anche come label del capitolo
 % \sezione{Nome sezione}{sez1}
 \capitolo{Background}{capitoli/background}
-\capitolo{Tecnologie}{capitoli/tecnologie}
+\capitolo{Flow}{capitoli/flow}
 \capitolo{Implementazione}{capitoli/implementazione}
 
 % Bibliografia con BibTeX (obbligatoria)

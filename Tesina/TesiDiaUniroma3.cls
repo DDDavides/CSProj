@@ -71,29 +71,20 @@
       \vspace{15mm}
       {\LARGE Progetto Cybersecurity} \\
       \vspace{15mm}
-      {\huge \@titolo} \\
+      {\HUGE \@titolo} \\
       \vspace{15mm}
-      % {\begin{table}[h!]
-      % \centering
-      %     \begin{tabular}{ccc}
-      %          \textbf{\@autoreprimo} & \textbf{\@autoresecondo} & \textbf{\@autoreterzo} \\
-      %           Matricola \@matricolaprima & Matricola \@matricolaseconda & Matricola \@matricolaterza
-      %     \end{tabular}
-      % \end{table}}
       \begin{tabular}{c c c}
        \textbf{\@autoreprimo} & \textbf{\@autoresecondo} & \textbf{\@autoreterzo} \\
        Matricola \@matricolaprima & Matricola \@matricolaseconda & Matricola \@matricolaterza \\
-     \end{tabular} \\
-      \vspace{15mm}
-      % \vfill
+      \end{tabular} \\
+      \vspace{7mm}
       {\begin{figure}[h]
         \centering
             \begin{tabular}{m{1cm}c}
             \includegraphics[scale=0.01]{tesina/img/GitHub-logo.png} & \@github\\
             \end{tabular}
        \end{figure}
-      } \\
-      \vspace{7mm}
+      }
       \vfill
       {\large \today} \\
    \end{center}
