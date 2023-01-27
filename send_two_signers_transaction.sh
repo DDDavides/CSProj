@@ -23,13 +23,12 @@ do
     count=$(($count + 1))
 done
 
-
 # File temporaneo per salvare i compilati
 tmp="./tmp"
 
 # Build della transazione 
 flow transactions build $1 $args --proposer $2 --payer $2 \
-    --authorizer $5 --authorizer $3  -s $tmp -x payload -y >> /dev/null && \
+    --authorizer $3 --authorizer $5  -s $tmp -x payload -y >> /dev/null && \
 # $4 firma il payload 
 flow transactions sign $tmp --signer $4 -s $tmp -x payload -y >> /dev/null && \
 \
