@@ -1,20 +1,78 @@
-Sito loro
+Cadence è il linguaggio di programmazione creato da Flow per lo sviluppo di smart contracts e introduce nell'ambito un nuovo paradigma di programmazzione. Infatti Cadence viene definito come un linguaggio \textbf{\textit{resource-oriented programming}}, caratterizzato dal fatto che ciascuna funzionalità è stata realizzata da favorire il concetto fondamentale di risorsa (approfondite nella sezione \ref{sez:resources}).
 
-https://flow.com/post/resources-programming-ownership
+Inoltre Cadence fornisce una serie di \textit{Design Patterns} e \textit{best practices} utili a guidare lo sviluppo ed evitare di commettere errori che potrebbero portare a gravi bug di sicurezza \cite{web:design-pattern}.
 
-cadence ha alcune best practices e design patterns e ci metti un rimando alla bibliografia
-\subsection{Resources}
-Stralcio di codice con concetti principali presi dal tutorial, come move operator, il fatto che sono uniche e non possono essere copiate. A differenza delle struct 
+In Cadence esistono tre componenti programmabili principali:
+\subsection*{Scripts}
+che permettono di eseguire codice non permanente sulla blockchain di Flow, che possono anche ritornare dati e che non richiedono alcuna pagamento nella loro esecuzione. Per il modo con cui sono ideati e realizzati quindi tali elementi permettono di eseguire esclusivamente operazioni di lettura verso la blockchain. Ciascuno script inoltre deve sempre contenere una funzione\codeinline{pub fun main()}.
+\subsection*{Transactions}
+che, a differenza degli Scripts, permettono di eseguire codice permanente sulla blockchain, e quindi di effettuare operazioni anche di scrittura che alterano permanentemente lo stato della catena. Per tale motivo ciascuna transazione ha un costo che dipende dal numero di operazioni svolte. Inoltre richiedono anche ulteriore informazione quale:
 
-Collezione di risorse. in un path solo una risorsa che è la collezione e non posso avere più risorse nello stesso path oooo capito?!
+\begin{itemize}
+    \item \textbf{proposer} che aiuta a prevenire il \textit{repeat attack}
+    \item \textbf{payer} che è colui che prende in carico il pagamento della transazione
+    \item \textbf{authorizations} che permettono di definire quali account firmano e a cui è possibile accedere o effettuare modifiche
+\end{itemize}
 
-https://developers.flow.com/cadence/tutorial/03-resources
+Devono essere firmate da uno o più account, possono dichiarare dei parametri da passare come argomenti e vanno inviate alla Blockchain per interagire con essa. Possono richiedere l'import di uno o più contratti per poter eseguire alcune delle loro funzioni e il corpo di una transazione è dichiarato usando \codeinline{transactions}. Inoltre ciascuna transazione presenta 4 fasi ordinate principali: \textbf{prepare}, \textbf{pre}, \textbf{execute} e \textbf{post} . La prima fase è usata per accedere agli oggetti relativi agli account che firmano la transazione. Quella relativa all'esecuzione invece è necessaria per eseguire la logica principale della transazione. Infine le fasi di pre e post-condizioni servono per effettuare controlli espliciti prima e dopo quella di esecuzione.
+\subsection*{Contracts}
+che sono una collezione di definizioni di tipi quali: \textbf{interfaces}, \textbf{structs}, \textbf{resources}, lo stato e le funzioni che vivono in un area di \textit{storage} dei contratti di una account. Tutti i tipi sopradefiniti non possono esistere al di fuori di un contratto deployato. I contratti vengono dichiarati usando il costrutto \codeinline{contract} e tramite la funzione \codeinline{init()} è possibile inizializzarne i campi. Infine  transazioni o altri contratti possono richiamarne uno per poter interagire con dei contratti deployati semplicemente importandoli.
+
+\subsection{Resources}\label{sez:resources}
+Come già accennato, il concetto su cui si basa Flow è quello di risorsa, con cui si è in grado di rappresentare dati posseduti unicamente da un solo proprietario, evitando che se ne possa fare una copia e distribuirne i duplicati. 
+
+Con le risorse, quindi, si rappresenta un nuovo tipo di dato (i.e.\codeinline{resource}) affiancato da una serie di regole fondamentali di cui è necessario tener conto durante lo sviluppo:
+
+\begin{enumerate}
+    \item Ogni risorsa esiste esattamente ed esclusivamente in un luogo in ogni istante temporale e non può essere duplicata
+    \item Il possessore di una risorsa è definito dal luogo dove la risorsa stessa è salvata e non è necessario un \textit{ledger} centrale da dover consultare per determinarne il possesso
+    \item L'accesso ai metodi su una risorsa sono limitati al suo possessore
+\end{enumerate}
+
+La prima di queste caratteristiche si ottiene evitando l'"assegnazione" di risorse (con l'operatore \codeinline{=}) e permettendone una gestione che prevede esse siano prima create, poi mosse o eventualmente distrutte. Questo tipo di operazioni possono essere utilizzate nelle funzione, ma è necessario che alla fine di essa le risorse non vadano fuori scope e quindi perse dinamicamente.
+
+Di seguito si mostrano i principali operatori e se ne descrive la semantica:
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|>{\centering\arraybackslash}p{8cm}|}
+         \hline
+         \textbf{Operatori} & \textbf{Semantica}\\
+         \hline
+         \codeinline{create} & Crea la risorsa\\
+         \hline
+         \codeinline{destroy} & Distrugge la risorsa\\
+         \hline
+         \codeinline{<- (move operator)} & Invalida il riferimento alla risorsa prima che sia spostata, così da renderne impossibile l'utilizzo e muove la risorsa\\
+         \hline
+         \codeinline{<-> (swap operator)} & Scambia una risorsa con un altra \\
+         \hline
+    \end{tabular}
+    \caption{Principali operatori per la gestione delle risorse}
+    \label{tab:resourceCommands}
+\end{table}
+
+Tutto ciò permette alle risorse di Flow di non essere vittima del \textbf{\textit{reentrancy exploits}}, uno dei più famosi attacchi nella storia di Ethereum causati da un bug negli Smart Contract \cite{web:re}.
 
 \subsection{Accounts}
-Due tipi di account
-https://developers.flow.com/cadence/language/accounts
+In flow ogni account può essere acceduto per mezzo di due differenti tipi che sono:
+\begin{itemize}
+    \item \codeinline{PublicAccount}: rappresenta la parte pubblica di un account, la quale può essere acceduta da qualsiasi codice tramite la funzione built-in di flow \codeinline{getAccount()} per mezzo dell'address dell'account cui si vuole accedere.
+    \item \codeinline{AuthAccount}: rappresenta la parte autorizzata di un account, la quale ha pieno controllo sullo \textbf{storage}, sulla chiave pubblica e sul codice di tale account. Per questo transazione può accedere all'\codeinline{AuthAccount} solo di chi la firma come authorizer. Tale interazione viene definita nel codice della transazione come un parametro nella fase di \codeinline{prepare}.
+\end{itemize}
+Tutti gli account presentano quello che è uno \textbf{Storage}, nel quale possono essere immagazzinate sia le strutture dati (struct) che le risorse. Un oggetto nello storage viene immagazzinato sotto un \codeinline{Path}, il quale consiste in un dominio, un identificatore ed inizia con il carattere \codeinline{/}. Esistono tre tipi di Path che si riferiscono a tre diversi dominii dello storage che sono:
+\begin{itemize}
+    \item \codeinline{/Storage/}: con il relativo tipo \codeinline{StoragePath};
+    \item \codeinline{/Public/}: con il relativo tipo \codeinline{PublicPath};
+    \item \codeinline{/Private/}: con il relativo tipo \codeinline{PrivatePath}.
+\end{itemize}
+Nello StoragePath possono essere immagazzinati soltanto gli oggetti, mentre sotto PublicPath e PrivatePath possono essere immagazzinate solo le Capabilities. 
 
 \subsection{Capabilities}
-https://developers.flow.com/cadence/language/capability-based-access-control
+Col concetto di risorsa introdotto solo gli utenti possessori possono accedere alle risorse che possiedono. Tuttavia gli utenti spesso vogliono che specifici altri utenti o anche chiunque possa accedere a certi campi o funzioni di un oggetto salvato. Questo può essere fatto creando delle \textbf{capability} e grazie al \textbf{Capability-based Acces Control}. Le \text{Capabilities} permettono ad un utente di concedere l'accesso a specifici campi e funzioni all'interno del loro account. Chiunque possiede una capability non può spostare o distruggere l'oggetto a cui è legato ma può solamente accedere a cui campi dichiarati esplicitamente da chi possiede l'oggetto. Per poter creare una nuova capability si usa la funzione \codeinline{link} di account:
+\begin{lstlisting}[style=all, style=cadence]
+let capability = account.link<&HelloWorld.HelloAsset>(/public/Hello,    target: /storage/Hello)
+\end{lstlisting}
+Nell'esempio mostrato è possibile notare tra \codeinline{<>} viene specificato il tipo della risorsa a cui la capability fa riferimento e chiunque accede alla capability può accedere solamente ai campi relativi a quel tipo, mentre come parametro viene specificato il path publico per accedere al riferimento e con \codeinline{target:} il path dell'oggetto privato che si sta linkando.
+Per poter creare e ottenere un riferimento all'oggetto a cui è legata la capability le capabilities offrono il metodo \codeinline{borrow}. 
 
-https://developers.flow.com/cadence/tutorial/04-capabilities
+Infine viene messo a disposizione anche un metodo \codeinline{unlink} dell'account per poter rimuovere un collegamento ad una risorsa qualora non sia più necessario o voluto.

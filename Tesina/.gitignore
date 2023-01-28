@@ -5,5 +5,5 @@
 *.log
 *.toc
 *.pdf
-
+*.DS_Store
 !/img/*
