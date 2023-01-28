@@ -1,5 +1,9 @@
-*.aux
-*.log
-*.out
 *.gz
+*.aux
+*.out
+*.lof
+*.log
+*.toc
 *.pdf
+
+!/img/*
