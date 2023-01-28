@@ -2,7 +2,7 @@
 \documentclass{TesiDiaUniroma3}
 % --- INIZIO dati relativi al template TesiDiaUniroma3
 % dati obbligatori, necessari al frontespizio
-\titolo{Flow NFT}
+\titolo{Implementazione di creazione, scambio, vendita e logica di NFT sulla blockchain Flow}
 \autoreprimo{Davide Galletti}
 \matricolaprima{533152}
 \autoresecondo{Davide Gattini}
@@ -22,7 +22,8 @@
 \usepackage{xcolor}
 \usepackage[most]{tcolorbox}
 \usepackage{listings} % per scrittura di codice
-
+% \setlength{\tabcolsep}{5pt} % Default value: 6pt
+\renewcommand{\arraystretch}{1.3} % Default value: 1
 
 \definecolor{bluegray}{rgb}{0.4, 0.6, 0.8}
 \definecolor{coolblack}{rgb}{0.0, 0.18, 0.39}
@@ -120,11 +121,11 @@
 }
 
 \tcbset{on line, 
-        boxsep=2pt,left=0pt,right=0pt,top=0pt,bottom=0pt,
+        boxsep=2pt, left=0pt,right=0pt,top=0pt,bottom=0pt,
         colframe=white,colback=InlineGray,
 }
-
 \newcommand{\codeinline}[1]{\tcbox{\lstinline[style=inline]|#1|}}
+
 \hypersetup{
     plainpages=false,
     hidelinks,
