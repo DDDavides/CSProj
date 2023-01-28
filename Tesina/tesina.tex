@@ -19,11 +19,111 @@
 \usepackage{amsmath}	% per ``cases'' environment
 % --- FINE richiamo di pacchetti di utilità
 
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
 \usepackage{listings} % per scrittura di codice
 
-\usepackage{xcolor}
+
 \definecolor{bluegray}{rgb}{0.4, 0.6, 0.8}
 \definecolor{coolblack}{rgb}{0.0, 0.18, 0.39}
+
+\definecolor{BrickRed}{HTML}{B6321C}
+\definecolor{Peach}{HTML}{F7965A}
+\definecolor{ForestGreen}{HTML}{009B55}
+\definecolor{Blue}{HTML}{0099FF}
+
+\definecolor{InlineGray}{HTML}{E3E3E3}
+
+
+% this style should be active for all lstlistings environments
+\lstdefinestyle{all}{
+  % columns=flexible,
+  tabsize=1,
+  columns=fixed,
+  keepspaces=true,
+  frameshape={}{y}{}{}, % per rimuovere la linea vericale sulla sinistra `frameshape={}{}{}{}`
+  basicstyle = {\small\ttfamily \color{black}},
+  showstringspaces=false,
+  rulecolor=\color{black},
+  numberstyle=\tiny\color{lightgray}
+}
+
+\lstdefinestyle{inline}{
+  basicstyle={\small\ttfamily \color{black}},
+  columns=fixed,
+  showstringspaces=false,
+}
+
+\lstdefinestyle{bash}{
+    frame=l,
+    captionpos=b,
+    tabsize=4,
+    breaklines=true,
+    showstringspaces=false,
+    numbers=left,
+    upquote=true,
+    classoffset=0,
+    escapechar=\&,
+    morekeywords=[1]{,flow,echo,},
+    morekeywords=[2]{,transactions,accounts,project,deploy,},
+    morestring=*[d]{"},
+    morestring=[s][\color{blue}]{\$\{}{\}},
+    commentstyle=\itshape\color{blue},
+    stringstyle=\color{Peach},
+    keywordstyle=[1]\color{Peach},
+    keywordstyle=[2]\color{Blue},
+      %   literate=%
+      % {+}{{{\color{red}+}}}1
+      % {-}{{{\color{red}-}}}1
+      % {*}{{{\color{red}*}}}1
+      % {/}{{{\color{red}/}}}1
+      % {?}{{{\color{red}?}}}1
+      % {>}{{{\color{red}>}}}1
+      % {<}{{{\color{red}<}}}1
+      % {=}{{{\color{red}=}}}1,
+}
+\lstdefinestyle{cadence}{
+    frame=l,
+    captionpos=b,
+    tabsize=4,
+    breaklines=true,
+    showstringspaces=false,
+    numbers=left,
+    upquote=true,
+    classoffset=0,
+    escapechar=\&,
+    morekeywords=[1]{,pub,emit,pre,pos,execute,return,create,import,from,}, % Python builtin
+    morekeywords=[2]{,contract,resource,interface,access,let,}, % Python builtin
+    % morekeywords=[3]{,open,close,write,}, % Python builtin
+    morestring=*[d]{"},
+    stringstyle=\color{BrickRed},
+    keywordstyle=[1]\color{blue},
+    keywordstyle=[2]\color{blue},
+    literate=%
+      {+}{{{\color{red}+}}}1
+      {-}{{{\color{red}-}}}1
+      {*}{{{\color{red}*}}}1
+      {_/}{{{\color{red}/}}}1
+      {?}{{{\color{red}?}}}1
+      {>}{{{\color{red}>}}}1
+      {<}{{{\color{red}<}}}1
+      {=}{{{\color{red}=}}}1
+      % {??}{{{\color{red} ?? }}}1
+      {>=}{{{\color{red} >= }}}1
+      {<=}{{{\color{red} <= }}}1
+      {!=}{{{\color{red} != }}}1
+      {<-}{{{\color{red} <- }}}1
+      {<<}{{{\color{red} << }}}1
+      {>>}{{{\color{red} >> }}}1,
+    morecomment=[f][\color{ForestGreen}][0]{//},
+    commentstyle=\itshape{\color{ForestGreen}},
+}
+
+\tcbset{on line, 
+        boxsep=3pt, left=0pt,right=0pt,top=0pt,bottom=0pt,
+        colframe=white,colback=InlineGray,
+}
+\newcommand{\codeinline}[1]{\tcbox{\lstinline[style=inline]|#1|}}
 
 \hypersetup{
     plainpages=false,
