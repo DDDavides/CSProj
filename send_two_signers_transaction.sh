@@ -10,7 +10,7 @@
 # $3 -> Address del primo firmatario                                         #
 # $4 -> Nome del secondo firmatario                                          #
 # $5 -> Address del second firmatario                                        #
-# $@ > 5 -> Argomenti della transazione                                          #
+# $@ > 5 -> Argomenti della transazione                                      #
 ##############################################################################
 
 count=1

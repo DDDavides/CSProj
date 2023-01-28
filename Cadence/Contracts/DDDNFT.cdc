@@ -182,6 +182,7 @@ pub contract DDDNFT: NonFungibleToken {
         pub fun deposit(token: @NonFungibleToken.NFT)
         pub fun getIDs(): [UInt64]
         pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
+        pub fun idExists(id: UInt64): Bool
         pub fun borrowDDDNFT(id: UInt64): &DDDNFT.NFT? {
             post {
                 (result == nil) || (result?.id == id):
@@ -239,6 +240,10 @@ pub contract DDDNFT: NonFungibleToken {
         ///
         pub fun getIDs(): [UInt64] {
             return self.ownedNFTs.keys
+        }
+
+        pub fun idExists(id: UInt64): Bool {
+            return self.ownedNFTs.keys.contains(id)
         }
 
         /// Gets a reference to an NFT in the collection so that 

@@ -1,5 +1,5 @@
-import NonFungibleToken from "../Contracts/NonFungibleToken.cdc"
-import DDDNFT from "../Contracts/DDDNFT.cdc"
+import NonFungibleToken from "../../Contracts/NonFungibleToken.cdc"
+import DDDNFT from "../../Contracts/DDDNFT.cdc"
 
 /// This transaction is for transferring and NFT from
 /// one account to another

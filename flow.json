@@ -1,5 +1,6 @@
 {
 	"contracts": {
+		"DDDMarketplace": "./Cadence/Contracts/DDDMarketplace.cdc",
 		"DDDNFT": "./Cadence/Contracts/DDDNFT.cdc",
 		"FlowToken": "./Cadence/Contracts/Utility/FlowToken.cdc",
 		"FungibleToken": "./Cadence/Contracts/Utility/FungibleToken.cdc",
@@ -16,19 +17,15 @@
 	"accounts": {
 		"Alice": {
 			"address": "01cf0e2f2f715450",
-			"key": "ee8593ce3e0d442f1f2807a920a0a2ebc8a7f9240aac4187144280b4452cea44"
+			"key": "2ebece1ab97122253a56c0aebb39454b7e2fee2596bdec80c48e693eb194f74c"
 		},
 		"Bob": {
 			"address": "179b6b1cb6755e31",
-			"key": "45334d9af974a72ea3f6b3b73f28da4d198e9891e62b648893a079f7d222075d"
-		},
-		"Charlie": {
-			"address": "f3fcd2c1a78f5eee",
-			"key": "5a63211a4f3bbc69d2a48915bb67ec4192db01a6d6c976193b6cca6f73ec7b7b"
+			"key": "0485c5230ca335f2516a8a422791971513139539f83879ae57ad81a0ba85f66c"
 		},
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
-			"key": "a26abee3b471f27350b08de70cbd3d6293f53b40a5e815871a61ed7f7c54ba47"
+			"key": "6dc59a692e47895cf8c142803e4e8ba1c6869d76ba469b89e8f1b724ceec7196"
 		}
 	},
 	"deployments": {
@@ -39,7 +36,8 @@
 				"MetadataViews",
 				"NonFungibleToken",
 				"FlowToken",
-				"FungibleTokenMetadataViews"
+				"FungibleTokenMetadataViews",
+				"DDDMarketplace"
 			]
 		}
 	}

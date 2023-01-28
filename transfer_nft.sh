@@ -6,5 +6,5 @@
 # $3 -> ID dell'nft da inviare
 #
 
-transactions="./Cadence/Transactions"
-flow transactions send $transactions/transfer_nft.cdc $2 $3 --signer $1
+nonfungibletoken="./Cadence/Transactions/NonFungibleToken"
+flow transactions send $nonfungibletoken/transfer_nft.cdc $2 $3 --signer $1

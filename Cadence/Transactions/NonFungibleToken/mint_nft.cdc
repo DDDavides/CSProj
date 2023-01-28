@@ -1,7 +1,7 @@
-import NonFungibleToken from "../Contracts/NonFungibleToken.cdc"
-import DDDNFT from "../Contracts/DDDNFT.cdc"
-import MetadataViews from "../Contracts/MetadataViews.cdc"
-import FungibleToken from "../Contracts/Utility/FungibleToken.cdc"
+import NonFungibleToken from "../../Contracts/NonFungibleToken.cdc"
+import DDDNFT from "../../Contracts/DDDNFT.cdc"
+import MetadataViews from "../../Contracts/MetadataViews.cdc"
+import FungibleToken from "../../Contracts/Utility/FungibleToken.cdc"
 
 /// This script uses the NFTMinter resource to mint a new NFT
 /// It must be run with the account that has the minter resource
