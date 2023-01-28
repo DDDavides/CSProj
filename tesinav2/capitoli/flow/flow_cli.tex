@@ -1,0 +1,28 @@
+Una delle tecnologie più utilizzate nel corso dello sviluppo del progetto è stata la \textbf{Command Line Interface} (CLI), questa mette a disposizione un insieme di funzionalità utili agli sviluppatori per effettuare il test di vario tipo per verificare la correttezza delle applicazioni, nello specifico ci ha permesso di visualizzare e testare i risultati del deploy dei contratti e dell'esecuzione di transazioni e script. Inoltre la CLI può interfacciarsi con tre diverse reti, che sono:
+\begin{itemize}
+	\item \textbf{Mainnet}: la rete principale di Flow, definita per le transazioni e gli smart contracts.
+	\item \textbf{Testnet}: un ambiente di prova che gli sviluppatori possono utilizzare per testare le loro applicazioni e contratti prima di implementarli sulla rete principale.
+	\item \textbf{Emulatore}: una Blockchain off-line utile per testare il comportamento dei contratti in un ambiente controllato.
+\end{itemize}
+Con il comando \codeinline{flow} si ha accesso all'interfaccia della CLI, nella quale le varie funzionalità sono organizzate secondo una struttura gerarchica individuata dalla "risorsa" su cui operano. Tra le varie funzionalità, quelle che sono state maggiormente utilizzate ai fini del progetto sono le seguenti:
+\begin{itemize}
+	\item Con il prefisso \codeinline{flow accounts} si raggiungono le funzioni:
+	\begin{itemize}
+		\item \codeinline{create}: per creare un account;
+		\item \codeinline{get}: per ottenere le informazioni in chain dell'account sulla base del suo indirizzo;
+		\item \codeinline{add-contract}: per aggiungere un determinato contratto ad un account in chain;
+		\item \codeinline{remove-contract}: per rimuovere un determinato contratto ad un account in chain;
+		\item \codeinline{update-contract}: per aggiornare un determinato contratto per un account in chain;
+	\end{itemize}
+	\item Con il prefisso \codeinline{flow transactions} si raggiungono le funzioni:
+	\begin{itemize}
+		\item \codeinline{send}: per firmare ed inviare una transazione; 
+		\item \codeinline{get}: per vedere le informazioni di una transazione precedentemente inviata;
+		\item \codeinline{build}: per poter compilare una transazione specificando glia account authorizer, payer e proposer;
+		\item \codeinline{sign}: per poter firmare una transazione precedentemente compilate;
+		\item \codeinline{send-signed}: per poter inviare una transazione precedentemente buildata e firmata;
+	\end{itemize}
+	\item Con il comando \codeinline{flow scripts execute} si eseguire uno script in chain;
+	\item Con il comando \codeinline{flow emulator} si avvia l'emulatore.
+	\item Con il comando \codeinline{flow project deploy} si eddettua il deploy dei vari contratti, specificati nel file \codeinline{flow.json}, sull'emulatore.
+\end{itemize}

@@ -1,0 +1,28 @@
+Come riferito da \cite{web:nft} tale standard definisce le funzionalità minime richieste per implementare contratti per NFT che siano sicuri e facili da utilizzare.
+
+\subsection{Funzionalità principali}
+Il contratto definisce il seguente insieme di funzionalità principali che ciascun NFT deve includere in ogni implementazione. Nello specifico è presente una variabile \codeinline{totalSupply} che tiene traccia del numero dei token di quel tipo esistenti e che viene utilizzara per inizializzare l'\textit{id} alla creazione dell'NFT.
+
+Successivamente sono necessarie le implementazioni delle due interfacce relative alle risorse fondamentali alla base dello standard:
+\begin{itemize}
+    \item \codeinline{NFT}, una risorsa che descrive la struttura di un singolo NFT.
+    \item \codeinline{Collection}, una risorsa che permette di mantenere più NFT in contemporanea.
+\end{itemize}
+
+Viene definita perlopiù l'interfaccia della risorsa \codeinline{CollectionPublic} che permette di accedere per mezzo di linking di capabilities alle funzioni pubbliche della collezione come quella di \codeinline{deposit}.
+
+Inoltre vanno implementate le seguenti funzioni di base:
+\begin{itemize}
+    \item \codeinline{createEmptyCollection} che permette di creare una nuova collezione e che deve ritornare una collezione vuota che non contiene NFT. Successivamente tale collezione va salvata e linkata con una capability di tipo CollectionPublic.
+    \item \codeinline{withdraw} che permette di ritirare un NFT da una collezione.
+    \item \codeinline{Deposit} che permette di depositare un NFT in una collezione.
+    \item \codeinline{getIDs} che permette di ottenere una lista di tutti gli NFT in una collezione.
+\end{itemize}
+Attraverso questi metodi deve avvenire lo scambio e la vendita dei Non-Fungible token. Inoltre devono anche essere inclusi una serie di elementi \codeinline{event}, eventi che tramite il costrutto \codeinline{emit} possono essere lanciati in una funzione per ottenere informazioni su quanto avvenuto.
+
+Infine deve anche implementare l'interfaccia  \codeinline{MetadataViews.Resolver} che permette di implementare una o più tipi di viste per i metadati dell'NFT
+
+
+
+
+interfaccia CollectionPublic che dice le cose publiche accedibili della colle
