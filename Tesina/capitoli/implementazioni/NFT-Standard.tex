@@ -1,0 +1,22 @@
+In tale sezione viene analizzato lo standard di FLOW per gli NFT e di come, in accordo con quanto riferito da \cite{web:nft}, definisca le funzionalità minime richieste per implementare contratti per Non-Fungible token che siano sicuri e facili da utilizzare.
+
+\subsection{Funzionalità principali}
+Il contratto definisce il seguente insieme di funzionalità principali che ciascun NFT deve includere in ogni implementazione. Nello specifico è presente una variabile \codeinline{totalSupply} che tiene traccia del numero dei token di quel tipo esistenti e che viene utilizzata per inizializzare l'\textit{id} alla creazione dell'NFT.
+
+Successivamente sono necessarie le implementazioni delle due interfacce relative alle risorse fondamentali alla base dello standard:
+\begin{itemize}
+    \item \codeinline{NFT}, una risorsa che descrive la struttura di un singolo NFT.
+    \item \codeinline{Collection}, una risorsa che permette di mantenere più NFT in contemporanea. Tale risorsa deve implementare le interfacce \codeinline{CollectionPublic}, la quale permette di accedere per mezzo di linking di capabilities alle funzioni pubbliche della collezione, e 
+    \codeinline{Provider} e \codeinline{Receiver}, le quali definiscono rispettivamente i metodi withdraw e deposit per il ritiro e il deposito degli NFT.
+\end{itemize}
+
+Per tale motivo vanno quindi implementate le seguenti funzioni di base:
+\begin{itemize}
+    \item \codeinline{createEmptyCollection} con cui si crea e ritorna una nuova collezione vuota, cioè priva di NFT. Successivamente tale collezione deve essere salvata e linkata con una capability di tipo CollectionPublic.
+    \item \codeinline{withdraw} che permette di ritirare un NFT da una collezione.
+    \item \codeinline{deposit} che permette di depositare un NFT in una collezione.
+    \item \codeinline{getIDs} che permette di ottenere una lista di tutti gli NFT in una collezione.
+\end{itemize}
+Attraverso questi metodi deve avvenire lo scambio e la vendita dei Non-Fungible token. Inoltre devono anche essere inclusi una serie di elementi \codeinline{event}, eventi che tramite il costrutto \codeinline{emit} possono essere lanciati in una funzione per ottenere informazioni su quanto avvenuto.
+
+Infine gli NFT allineanti a tale standard devono anche implementare l'interfaccia  \codeinline{MetadataViews.Resolver} che permette di implementare una o più tipi di viste per i metadati dell'NFT.

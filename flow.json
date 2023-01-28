@@ -23,10 +23,6 @@
 			"address": "179b6b1cb6755e31",
 			"key": "0485c5230ca335f2516a8a422791971513139539f83879ae57ad81a0ba85f66c"
 		},
-		"Bob": {
-			"address": "e03daebed8ca0615",
-			"key": "f244ba3a258d4b2735b080f2b423b03bcf76def5237d4c745cd491ebb463b597"
-		},
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
 			"key": "6dc59a692e47895cf8c142803e4e8ba1c6869d76ba469b89e8f1b724ceec7196"

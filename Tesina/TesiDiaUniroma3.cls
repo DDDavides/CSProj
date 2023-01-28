@@ -71,7 +71,7 @@
       \vspace{15mm}
       {\LARGE Progetto Cybersecurity} \\
       \vspace{15mm}
-      {\HUGE \@titolo} \\
+      {\Huge \@titolo} \\
       \vspace{15mm}
       \begin{tabular}{c c c}
        \textbf{\@autoreprimo} & \textbf{\@autoresecondo} & \textbf{\@autoreterzo} \\
@@ -93,8 +93,8 @@
 
 % Comandi riguardanti l'inserimento di capitoli
 \newcommand{\introduzione}[1]{\newpage \chapter{Abstract} \input{#1}}
-\newcommand{\capitolo}[2]{\newpage \chapter{#1}\label{cap:#2}\input{#2}}
-\newcommand{\sezione}[2]{\section{#1}\label{sez:#2}\input{#2}}
+\newcommand{\capitolo}[2]{\newpage \chapter{#1}\label{cap:#1}\input{#2}}
+\newcommand{\sezione}[2]{\section{#1}\label{sez:#1}\input{#2}}
 
 % Comandi riguardanti la generazione di indici
 \newcommand{\generaIndice}{
