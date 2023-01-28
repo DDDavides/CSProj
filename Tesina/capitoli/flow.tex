@@ -1,32 +1,16 @@
-che tipo di blockchain è e come utilizza i smart contracts
+La blockchain utilizzata per questo progetto è Flow, una valida alternativa a quelle già esistenti e che si distacca da le più note (e.g. Bitcoin) per una serie di innovazioni e cambiamenti apportati dai suoi creatori, la società Dapper Labs (creatrice anche di CryptoKitties). 
 
-Flow, the blockchain for open worlds 
-Flow is a fast, decentralized, and developer-friendly blockchain, designed as the foundation for a new generation of games, apps, and the digital assets that power them. 
-
-It is based on a unique, multi-role architecture, and designed to scale without sharding, allowing for massive improvements in speed and throughput while preserving a developer-friendly, ACID-compliant environment.
-
-Flow empowers developers to build thriving crypto- and crypto-enabled businesses. Applications on Flow can keep consumers in control of their own data; create new kinds of digital assets tradable on open markets accessible from anywhere in the world; and build open economies owned by the users that help make them valuable. 
-
-Smart contracts on Flow can be assembled like Lego blocks to power apps serving billions of people, from basketball fans to businesses with mission-critical requirements.
-
-There are four pillars that make Flow unique among existing blockchains: Multi-role architecture: Flow’s design is unique, allowing the network to scale to serve billions of users without sharding or reducing decentralization of consensus.
-
-Resource-oriented programming: smart contracts on Flow are written in Cadence, an easier and safer programming language for crypto assets and apps. Developer ergonomics: from upgradeable smart contracts and built-in logging support to the Flow Emulator, this network is designed for results. 
-
-Consumer onboarding: Flow was designed for mainstream consumers, with payment onramps catalyzing a safe and low-friction path from fiat to crypto.
-While we originally started building Flow for our own use-cases, it has quickly become far bigger than us. Hundreds of developers in our discord and thousands around the world agree: we’re being something special here. Let’s build the future together!
-
-Tool proposti da flow
-Thin client
+Lo sviluppo di Flow inizia nel 2019 quando le tecnologie concorrenti erano in crescita ed aumento, tra queste anche Ethereum cui riferimento è inevitabile poiché Flow prova a superarne i limiti e punti deboli espressi col tempo. L'obiettivo perseguito da Flow fa ausilio di un'architettura che si impegna a supportare una nuova generazione di giochi, apps e assets digitali, e affinché sia possibile, Flow apporta dei cambiamenti che inoltre rappresentano i suoi punti di forza: 
 
 \begin{itemize}
-    \item[] \textbf{Script}
-    \item[] \textbf{Transactions}
-    \item[] \textbf{Contract}
+    \item \textbf{Architettura multi ruolo}. Flow permette la coesistenza di nodi a cui è possibile assegnare ruoli differenti, ciascuno relativo alla realizzazione di un task. Esistono i seguenti 5 tipi di nodi: nodi di raccolta, consenso, esecuzione, verifica o accesso. La suddivisione di queste attività ha guidato la realizzazione di una blockchain veloce poiché sfrutta la parallelizzazione dei tasks, altrimenti sostituita da un approccio lineare e quindi più lento.
+    \item \textbf{Programmazione orientata alle risorse}. Si introduce un linguaggio proprietario per la realizzazione di Smart Contracts (e non solo), stiamo parlando di \textit{Cadence}, un linguaggio semplice, sicuro e orientato alle risorse.
+    \item \textbf{Ergonomia dello sviluppatore}. Sono messi a disposizione dei tools per aiutare lo sviluppo e i programmatori, a cui inoltre si rende più semplice, a differenza di Ethereum, la modifica e/o aggiornamento degli Smart Contracts.
+    \item \textbf{HotStuff, un protocollo di consenso rapido}. L'algoritmo di consenso utilizzato da Flow nasce dall'esigenza di creare un protocollo BFT veloce, sicuro e scalabile, che possa puntare a produrre un blocco in poco tempo, così che la convalida delle transazioni sia quasi istantanea.
 \end{itemize}
 
-Tabella di confronto con Ethereum
-
+% Utente non fidarti del creatore dello smart contract ma dello smart contract code
+% Puoi diventare un nodo anche con poco hw (hw non costoso)
 
 \sezione{Cadence}
 {capitoli/flow/cadence}
