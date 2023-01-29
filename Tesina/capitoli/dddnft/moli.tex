@@ -14,20 +14,92 @@ Inoltre vengono messe a disposizione dal marketplace una serie di funzioni fonda
     \item \codeinline{listForSale} che prende in input l'id di un token e il relativo prezzo e crea una vendita per quell'NFT;
     \item \codeinline{changePrice} che prende in input l'id di un token e il nuovo prezzo e cambia la vendita di quel token con quel nuovo prezzo;
     \item \codeinline{purchase} che prende in input l'id di un token e una risorsa di tipo;\codeinline{Vault} ed effettua l'acquisto dell'NFT con quell'id utilizzando i token passati per parametro ritornando la risorsa venduta;
-    \item \codeinline{createSaleCollectio} che crea una nuova risorsa SaleCollection;
+    \item \codeinline{createSaleCollection} che crea una nuova risorsa SaleCollection;
     \item funzioni utili come \codeinline{getIDs} e \codeinline{idPrice} per ottenere rispettivamente tutti i token in vendita per quella collezione e il prezzo del token passato come parametro;
 \end{itemize}
+Ciascuna di queste funzioni presenta delle pre e post condizioni che permettono di controllare che ciascuna operazione venga effettuata correttamente e che non ci siano incoerenze nei parametri in input.
 
 Inoltre il marketplace definisce un'interfaccia per la SaleCollection di tipo \codeinline{SalePublic} che mette a disposizione tutte le funzioni e campi pubblici accessibili per vendita (funzioni purchase, idPrice e getIDs). Nella realizzazione di tale contratto è fondamentale l'aspetto della sicurezza che viene tutelato grazie al forte utilizzo delle capabilities, specie per la collezione e il vault del proprietario per cui è possibile accedere esclusivamente ai campi e i metodi messi a disposizione rispettivamente da \codeinline{CollectionPublic} e \codeinline{Receiver}.
 
 \subsubsection{Transazioni}
 Per la realizzazione della logica del mercato sono state introdotte due transazioni fondamentali:
-\subsubsection*{\codeinline{create_sale} }transazione che prende in input sia l'id di un NFT in possesso dell'utente sia un prezzo e, dopo aver ottenuto un riferimento alla collezione da voler linkare per la vendita e al vault in cui poter ricevere i Fungible-Token, crea o ottiene un riferimento alla \textit{SaleCollection} e la linka con una capability per poi in ultimo invocare la funzione \codeinline{listForSale} per creare la vendita per quel token al prezzo desiderato.
+\subsubsection*{\codeinline{create_sale} }la transazione prende in input sia l'id di un NFT in possesso dell'utente sia il prezzo scelto a cui mettere in vendita il token:
+\begin{lstlisting}[style=all, style=cadence]
+transaction(tokenID: UInt64, price: UFix64){...}
+\end{lstlisting}
+Successivamente nella fase di \codeinline{prepare} si ottiene un riferimento alla collezione da voler linkare per la vendita e al vault in cui poter ricevere i Fungible-Token, si crea o ottiene un riferimento alla \textit{SaleCollection} e si linka con una capability di tipo \codeinline{PublicSale}:
+\begin{lstlisting}[style=all, style=cadence]
+prepare(acct: AuthAccount) {
+        let NFTCollectionProviderPrivatePath = /private/DDDNFTCollectionProvider
 
-\subsubsection*{\codeinline{purchase_nft}}transazione che prende in input l'id dell'NFT che si intende acquistare e l'indirizzo dell'account a cui appartiene la vendita e che effettua le seguenti operazioni:
+        // get the capability to the receiver Vault
+        let receiver = acct.getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(FlowToken.ReceiverPublicPath)
+        ...
+        // check for the capability to the CollectionPublic of the receiver
+        // if not exists it creates one
+        if !acct.getCapability<&{NonFungibleToken.Provider, NonFungibleToken.CollectionPublic}>(...).check() {
+            acct.link<...>(...)
+        }
+        
+        // get the capability for the CollectionPublic of the receiver
+        let collectionCapability = acct.getCapability<&{NonFungibleToken.Provider, NonFungibleToken.CollectionPublic}>(NFTCollectionProviderPrivatePath)
+        ...
+
+        // gets or creates the SaleCollection for the account Collection
+        self.saleRef = getOrCreateSaleCollection(account: acct, ownerCollection: collectionCapability, ownerVault: receiver)
+    }
+\end{lstlisting}
+In ultimo viene invocata in \codeinline{execute} la funzione \codeinline{listForSale} per creare la vendita per quel token al prezzo desiderato:
+\begin{lstlisting}[style=all, style=cadence]
+execute{
+        // creates the sale for the token to a specified price
+        self.saleRef.listForSale(tokenID: tokenID, price: price)
+    }
+\end{lstlisting}
+\subsubsection*{\codeinline{purchase_nft}}la transazione prende in input l'id dell'NFT che si intende acquistare e l'indirizzo dell'account a cui appartiene la vendita:
+\begin{lstlisting}[style=all, style=cadence]
+transaction(tokenID: UInt64, saleCollectionAddress: Address){...}
+\end{lstlisting}
+Inoltre la transazione prevede le due seguenti operazioni:
 \begin{itemize}
-    \item \textbf{prepare} che, dopo aver ottenuto dall'account firmante la capability della collezione in cui andare a salvare l'NFT e un riferimento al vault del \textit{signer}, controlla che il token richiesto sia effettivamente esistente e in vendita attraverso la capability della SaleCollection e ritira i Fungible-Token tramite il riferimento al vault ottenuto.
-    \item \textbf{execute} che invoca infine la funzione purchase per quel token depositandolo successivamente nella collezione dell'account \textit{signer}.
+    \item \textbf{prepare} che, dopo aver ottenuto dall'account firmante la capability della collezione in cui andare a salvare l'NFT e un riferimento al vault del \textit{signer}, controlla che il token richiesto sia effettivamente esistente e in vendita attraverso la capability della SaleCollection e ritira i Fungible-Token tramite il riferimento al vault ottenuto:
+    \begin{lstlisting}[style=all, style=cadence]
+prepare(acct: AuthAccount){
+        // gets or creates the capability for the purchaser collection
+        self.collectionCapability = getOrCreateCollectionCapability(account: acct)
+
+        // gets the capability for the seller SaleCollection
+        self.saleCollection = getAccount(saleCollectionAddress)
+                            .getCapability<...>
+                            (...).borrow()
+                            ...
+
+        // gets the price of the token in the SaleCollection
+        let price = self.saleCollection.idPrice(tokenID: tokenID)
+                    ...
+
+        // gets the capability for the purchaser vault
+        let vaultref = acct.borrow<&FlowToken.Vault>(...)
+            ...
+        // creates a vault with the aumount of money equal to the token price
+        self.temporaryVault <- vaultref.withdraw(amount: price)
+    }
+\end{lstlisting}
+    \item \textbf{execute} che invoca infine la funzione purchase per quel token depositandolo successivamente nella collezione dell'account \textit{signer}:
+    \begin{lstlisting}[style=all, style=cadence]
+execute {
+        // completes the sell and deposits the token to the purchaser collection
+        self.collectionCapability.deposit(token: <- self.saleCollection.purchase(tokenID: tokenID, buyTokens: <-self.temporaryVault))
+    }
+\end{lstlisting}
 \end{itemize}
 
-\subsubsection*{\codeinline{cancel_sale}}che prende in input un tokenID e cancella la vendita nella SaleCollection per quello specifico NFT.
+\subsubsection*{\codeinline{cancel_sale}}transazione che prende in input un tokenID e cancella la vendita nella SaleCollection per quello specifico NFT.
+
+Per verificarne la correttezza, sono stati eseguiti una serie di test tra cui:
+\begin{itemize}
+    \item Creazione di una vendita di un NFT per un account che ne possiede solo uno e acquisto di quel token
+    \item Creazione di una vendita di un NFT per un account che possiede più NFT e acquisto di quel token
+\end{itemize}
+Nessuna ambiguità è stata riscontrata a favore di un corretto funzionamento delle
+transazioni in questione.

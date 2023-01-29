@@ -58,7 +58,7 @@ Tutto ciò permette alle risorse di Flow di non essere vittima del \textbf{\text
 In flow ogni account può essere acceduto per mezzo di due differenti tipi che sono:
 \begin{itemize}
     \item \codeinline{PublicAccount}: rappresenta la parte pubblica di un account, la quale può essere acceduta da qualsiasi codice tramite la funzione built-in di flow \codeinline{getAccount()} per mezzo dell'address dell'account cui si vuole accedere.
-    \item \codeinline{AuthAccount}: rappresenta la parte autorizzata di un account, la quale ha pieno controllo sullo \textbf{storage}, sulla chiave pubblica e sul codice di tale account. Per questo transazione può accedere all'\codeinline{AuthAccount} solo di chi la firma come authorizer. Tale interazione viene definita nel codice della transazione come un parametro nella fase di \codeinline{prepare}.
+    \item \codeinline{AuthAccount}: rappresenta la parte autorizzata di un account, la quale ha pieno controllo sullo \textbf{storage}, sulla chiave pubblica e sul codice di tale account. Per questo la transazione può accedere all'\codeinline{AuthAccount} solo di chi la firma come authorizer. Tale interazione viene definita nel codice della transazione come un parametro nella fase di \codeinline{prepare}.
 \end{itemize}
 Tutti gli account presentano quello che è uno \textbf{Storage}, nel quale possono essere immagazzinate sia le strutture dati (struct) che le risorse. Un oggetto nello storage viene immagazzinato sotto un \codeinline{Path}, il quale consiste in un dominio, un identificatore ed inizia con il carattere \codeinline{/}. Esistono tre tipi di Path che si riferiscono a tre diversi dominii dello storage che sono:
 \begin{itemize}

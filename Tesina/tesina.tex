@@ -44,7 +44,7 @@
   columns=fixed,
   keepspaces=true,
   frameshape={}{y}{}{}, % per rimuovere la linea vericale sulla sinistra `frameshape={}{}{}{}`
-  basicstyle = {\small\ttfamily \color{black}},
+  basicstyle = {\tiny\ttfamily \color{black}},
   showstringspaces=false,
   rulecolor=\color{black},
   numberstyle=\tiny\color{lightgray}
@@ -65,7 +65,7 @@
     numbers=left,
     upquote=true,
     classoffset=0,
-    escapechar=\&,
+    % escapechar=\&,
     morekeywords=[1]{,flow,echo,},
     morekeywords=[2]{,transactions,accounts,project,deploy,},
     morestring=*[d]{"},
@@ -93,9 +93,9 @@
     numbers=left,
     upquote=true,
     classoffset=0,
-    escapechar=\&,
-    morekeywords=[1]{,pub,emit,pre,pos,execute,return,create,import,from,}, % Python builtin
-    morekeywords=[2]{,contract,resource,interface,access,let,}, % Python builtin
+    % escapechar=\&,
+    morekeywords=[1]{,pub,emit,pre,post,execute,return,create,import,from,prepare,}, % Python builtin
+    morekeywords=[2]{,contract,resource,transaction,interface,access,let,var,UFix64,UInt64,}, % Python builtin
     % morekeywords=[3]{,open,close,write,}, % Python builtin
     morestring=*[d]{"},
     stringstyle=\color{BrickRed},
@@ -111,12 +111,13 @@
       {<}{{{\color{red}<}}}1
       {=}{{{\color{red}=}}}1
       % {??}{{{\color{red} ?? }}}1
-      {>=}{{{\color{red} >= }}}1
-      {<=}{{{\color{red} <= }}}1
-      {!=}{{{\color{red} != }}}1
-      {<-}{{{\color{red} <- }}}1
-      {<<}{{{\color{red} << }}}1
-      {>>}{{{\color{red} >> }}}1,
+      {>=}{{{\color{red}>=}}}2
+      {<=}{{{\color{red}<=}}}2
+      {!=}{{{\color{red}!=}}}2
+      {<-}{{{\color{red}<-}}}2
+      {<<}{{{\color{red}<<}}}2
+      {>>}{{{\color{red}>>}}}2
+      {...}{{{\color{red}...}}}3,
     morecomment=[f][\color{ForestGreen}][0]{//},
     commentstyle=\itshape{\color{ForestGreen}},
 }
