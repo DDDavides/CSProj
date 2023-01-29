@@ -19,7 +19,6 @@ transaction(attkrNFTID: UInt64,  dfndrNFTID: UInt64,
         if attkrAttkExtr > 1.0 || attkrDefExtr > 1.0 {
             panic("Attaker extraction error") 
         } 
-        
         if dfndrAttkExtr > 1.0 || dfndrDefExtr > 1.0 {
             panic("Defender extraction error")
         }
@@ -61,25 +60,31 @@ transaction(attkrNFTID: UInt64,  dfndrNFTID: UInt64,
 
         // calcolo del vincitore (l'attaccante attacca per primo)
         let attkrWin = attkrHits <= dfndrHits
-        let attkrWinIncrement: UInt64 = attkrWin ? 1 : 0
-        let attkrLoseIncrement: UInt64 = !attkrWin ? 1 : 0
 
-        // incremento delle vittorie
-        self.attkrNFTRef.incrementVictories(increment: attkrWinIncrement)
-        self.attkrNFTRef.incrementDefeats(increment: attkrLoseIncrement)
+        // per ora è possibile incrementare solo di uno
+        let increment: UInt64 = 1
+        if attkrWin {
+            self.attkrNFTRef.incrementVictories(increment: increment)
+            self.dfndrNFTRef.incrementDefeats(increment: increment)
+        }
+        else {
+            self.dfndrNFTRef.incrementVictories(increment: increment)
+            self.attkrNFTRef.incrementDefeats(increment: increment)
+        }
 
-        self.dfndrNFTRef.incrementVictories(increment: attkrLoseIncrement)
-        self.dfndrNFTRef.incrementDefeats(increment: attkrWinIncrement)
 
-        // log del vincitore
+
+        // incremento delle vittorie e log del vincitore
         var winnerName: String = ""
         var winnerAddress: Address = 0x0
         if attkrWin {
             winnerName = self.attkrNFTRef.name
             winnerAddress = self.attacker.address
+
         } else {
             winnerName = self.dfndrNFTRef.name
             winnerAddress = self.defender.address
+
         }
         
         log(winnerName.concat(" of ").concat(winnerAddress.toString()).concat(" won!"))

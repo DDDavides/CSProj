@@ -1,3 +1,109 @@
-introduzione
+In questa sotto sezione viene riportato il lavoro svolto di ciò che vuole essere un esempio di logica applicativa dei nostri NFT. Il caso d'uso cui si riferisce è il seguente: 
+\begin{itemize}
+	\item[] Un account \textbf{Alice} (Attaccante) vuole sfidare, con un suo NFT \textbf{A}, l'NFT \textbf{B} di un altro account \textbf{Bob} (Difensore) in una battaglia (possiamo pensare agli NFT come una specie di combattente). Tale battaglia deve avvenire sulla base di un comportamento che presenta sia una parte aleatoria che una deterministica basata su quelle che sono le statistiche di combattimento presentate dagli NFT, la vittoria di una delle due parti verrà memorizzata con l'aggiornamento di due contatori, uno per le vittorie e l'altro per le sconfitte dei due NFT. Inoltre tale battaglia deve avvenire in maniera consensuale tra le parti, ovvero sia Alice che Bob devo accettare tale interazione.
+\end{itemize}
 
-\subsection{Implementazione}
+\subsection{Consenso tra attaccante e difensore}
+Il primo passo che è stato svolto nell'implementazione del caso d'uso è stato proprio quello relativo al consenso tra le parti. Per questo si è scelto l'utilizzo di una transazione a due firmatari, la quale prevede che sia Alice che Bob firmino prima dell'effettiva esecuzione in chain. Questo tipo di firma abilita ad un'interazione consensuale tra le parti nei confronti della battaglia, come riportato di seguito:
+\begin{lstlisting}[style=all, style=cadence]
+// attkrNFTID e dfndrNFTID sono gli identificatori degli NFT A e B
+transaction(attkrNFTID: UInt64,  dfndrNFTID: UInt64, ...) {
+    let attacker: AuthAccount
+    let defender: AuthAccount
+    ...
+	// qui vengono presi gli AuthAccount relativi alle firme
+	prepare(attacker: AuthAccount, defender: AuthAccount) {
+		...
+		self.attacker = attacker
+    	self.defender = defender
+    	...
+	}
+}
+\end{lstlisting}
+L'alternativa a questo tipo di interazione prevedeva l'utilizzo di due transazioni con un approccio di tipo richiesta-risposta nel quale, l'attaccante manda una "transazione di richiesta di battaglia" al difensore alla quale il difensore risponde con una "transazione di risposta alla battaglia", con l'idea che lo "stato" di tale connessione possa essere immagazzinato in due Capability, una per un metodo di battaglia all'NFT dell'attaccante e l'altra per una risorsa di tipo Battaglia che specifica quale NFT del difensore deve rispondere a tale richiesta. 
+
+Alla fine questa alternativa è stata scartata in quanto prevedeva due transazioni ed un costo per entrambi i firmatari, mentre la nostra implementazione prevede una sola transazione il cui costo è attribuito all'attaccante.
+
+\subsection{implementazione}
+Cadence è un linguaggio Turing completo e prevede l'utilizzo di cicli iterativi come \codeinline{while} e \codeinline{for} ma, per contrastare il \textbf{problema della fermata}, impone un limite sul numero di iterazioni che una transazione può svolgere così da poter garantire la corretta conclusione di una qualsiasi transazione. L'idea iniziale, relativa all'implementazione di questo caso d'uso, prevedeva la simulazione di una battaglia a turni all'interno di una transazione, dove i due NFT si sarebbero andati a scontrare sulla base di alcune loro statistiche come \textbf{attacco}, \textbf{difesa}, e \textbf{punti vita} con un attenuante randomico per ciascuna iterazione. Questa soluzione, proprio per la sua componente randomica, non garantisce che l'esecuzione della transazione termini entro il limite di iterazioni previste, per questo è stata scelta un'altra soluzione nella quale non si procede a turni ma si effettuano dei calcoli sulla base di valori estratti randomicamente e passati direttamente alla transazione come parametri nel seguente modo:
+\begin{lstlisting}[style=all, style=cadence]
+transaction(..., 
+	attkrAttkExtr: UFix64, attkrDefExtr: UFix64, 
+    dfndrAttkExtr: UFix64, dfndrDefExtr: UFix64)
+{ ... }
+\end{lstlisting}
+Tali parametri andranno rispettivamente ad influenzare attacco e difesa dell'NFT attaccante e dell'NFT difensore nella battaglia. Quindi gli NFT presentano un attacco, una difesa, dei punti vita e due contatori inizializzati a zero per il numero di vittorie ed il numero di sconfitte, dove quest'ultimi sono inizializzati a zero nel momento in cui l'NFT viene mintato e verranno incrementati esclusivamente per mezzo di due metodi \codeinline{incrementVictories} e \codeinline{incrementDefeats}. Questo in termini di codice viene implementato come segue:
+\begin{lstlisting}[style=all, style=cadence][!h]
+...
+pub resource NFT ... {
+	...
+    /// campi per l'interazione
+    pub var health: UFix64
+    pub let attack: UFix64
+    pub let defense: UFix64
+    pub var victories: UInt64 
+    pub var defeats: UInt64
+    ...
+    pub fun incrementVictories(increment: UInt64) {
+        if increment > 1 { return }
+        self.victories = self.victories + increment
+    }
+    pub fun incrementDefeats(increment: UInt64) {
+        if increment > 1 { return }
+        self.defeats = self.defeats + increment
+    }
+	...
+	init(...,
+		health: UFix64,
+       	attack: UFix64,
+        defence: UFix64, ...){
+		...
+		self.attack = attack
+        self.defense = defense
+        self.health = health
+        self.victories = 0
+        self.defeats = 0
+	}
+	...
+}
+...
+\end{lstlisting}
+Per concludere, i riferimenti agli NFT di attaccante e difensore sono presi nella fase di prepare della transazione per mezzo della collezione utilizzando le funzione \textbf{borrow} e \textbf{borrowDDDNFT} poi, una volta calcolato il vincitore, sulla base delle estrazioni effettuate e le statistiche degli NFT, incrementati i contatori di vittorie e sconfitte dei rispettivi NFT. Questo è stato codificato come riportato di seguito (per semplicità non è stato riportato il calcolo del vincitore ma si può immaginare come una combinazione lineare di ciascuna delle statistiche pesata per la rispettiva estrazione).
+\begin{lstlisting}[style=all, style=cadence][!h]
+...
+// riferimenti alle collezioni di attaccante e difensore
+let attkrRef: &DDDNFT.Collection
+let dfndrRef: &DDDNFT.Collection
+// riferimenti agli NFT di attaccante e difensore
+let attkrNFTRef: &DDDNFT.NFT
+let dfndrNFTRef: &DDDNFT.NFT
+prepare(...) {
+	...
+    self.attkrRef = attacker.borrow<&DDDNFT.Collection>(from: DDDNFT.CollectionStoragePath) 
+    	?? panic("Attacker account does not store an object at the specified path")
+    self.dfndrRef = defender.borrow<&DDDNFT.Collection>(from: DDDNFT.CollectionStoragePath)
+        ?? panic("Defender account does not store an object at the specified path")
+
+    self.attkrNFTRef = self.attkrRef.borrowDDDNFT(id: attkrNFTID) 
+        ?? panic("No attacker NFT founded")
+    self.dfndrNFTRef = self.dfndrRef.borrowDDDNFT(id: dfndrNFTID) 
+        ?? panic("No defender NFT founded")
+    ...
+}
+execute {
+	...
+	// omesso il codice per il calcolo di "attkrWin" per semplicità
+	...
+    let increment: UInt64 = 1
+    if attkrWin {
+        self.attkrNFTRef.incrementVictories(increment: increment)
+        self.dfndrNFTRef.incrementDefeats(increment: increment)
+    }
+    else {
+        self.dfndrNFTRef.incrementVictories(increment: increment)
+        self.attkrNFTRef.incrementDefeats(increment: increment)
+    }
+    ...
+}
+...
+\end{lstlisting}
