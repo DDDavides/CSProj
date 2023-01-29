@@ -1,11 +1,39 @@
-Uno dei casi d'uso che sono stati affrontati nella realizzazione di questo progetto, è quello relativo allo scambio tra NFT. Idealmente questo dovrebbe avvenire  
+Uno dei casi d'uso che sono stati affrontati nella realizzazione di questo progetto, è quello relativo allo scambio tra NFT. Idealmente questo dovrebbe avvenire tra due account già presenti nel sistema, i quali selezionano gli NFT da scambiare, e che quindi devono necessariamente possedere, e successivamente si mettono d'accordo per concludere lo scambio. Tutto ciò deve avvenire assicurando e controllando che nessuno dei due provi a ingannare l'altro.
+
+Per conseguire l'obiettivo è stato necessario realizzare una transazione in Cadence che, una volta firmata e inviata, facesse rispettare queste necessità.
 
 \subsection{Implementazione}
 
+%CONTROLLA GLI IMPORT
+La realizzazione della transazione in questione, è caratterizzata dalla definizione che una volta firmata ed eseguita permetteva di ricoprire questo caso d'uso.
 
+Per prima cosa è necessario definire i parametri della transazione, associati agli id degli NFT che si vogliono scambiare:
 
+\begin{lstlisting}[style=all, style=cadence]
+transaction(idNFT1, idNFT2) {...}
+\end{lstlisting}
 
+Successivamente, è stata definita la logica applicativa dello scambio, che è stato realizzato grazie allo statement \codeinline{prepare}, cui utilizzo è necessario poiché quando, tramite la Flow CLI, si vuole firmare la transazione, i firmatari della stessa vengono passati come suoi parametri, quindi questi account vengono utilizzati per accedere all'NFT associato. 
 
+Per fare questo è stato necessario accedere alle collezioni degli account, per farlo è necessario accedervi tramite il path associato allo storage privato in cui la risorsa viene localizzata. In questo caso non è stato necessario l'utilizzo delle capability, poiché è possibile accedere alle risorse privare in sicurezza, grazie alla firma dei suoi proprietari.
 
+%codice prepare
 
+Si noti che come suggerito da Flow, il prepare viene utilizzato per l'acqusizione di risorse che verranno poi utilizzate nel \codeinline{execute}. Prima di parlarne, è necessario parlare delle precondizioni che devono essere verificate prima che gli NFT siano scambiati, infatti è necessario per evitare problemi, di controllare che gli NFT cui id viene passato come parametro, devono essere posseduti da chi li vuole scambiare. Si noti quindi, che l'ordine dei parametri sia della transazione che del prepare è importante
 
+%codice pre
+
+%Controlla dove sta il ritiro della risorsa (se nel prepare o execute)
+Successivamente viene eseguito lo scambio degli NFT, reso possibile tramite l'acquisizione delle risorse tramite withdraw, metodo richiamato sul riferimento alla collezione che permette di ottenre come valore di ritorno la risorsa con l'id passata come parametro. Poi, la prima risorsa verrà depositata nella seconda collezione, ovvero quella del secondo account passato come parametro, mentre la seconda nella prima collezione.
+
+%codice execute
+
+Infine, si eseguono ulteriori verifiche sul successo dello scambio appena avvenuto, semplicemente controllando che le risorse siano ora nelle giuste collezioni, quindi non si devono trovare in quelle originali, bensì in quelle corrette
+
+%codice post
+
+Per riassumere, la transazione in questione è la seguente:
+
+%codice tutta transazione
+
+\textbf{RILEGGI STA SUPER BOZZA CHE FA SUPER CAGARE}
