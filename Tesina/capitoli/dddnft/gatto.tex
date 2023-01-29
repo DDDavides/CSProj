@@ -1,39 +1,121 @@
-Uno dei casi d'uso che sono stati affrontati nella realizzazione di questo progetto, è quello relativo allo scambio tra NFT. Idealmente questo dovrebbe avvenire tra due account già presenti nel sistema, i quali selezionano gli NFT da scambiare, e che quindi devono necessariamente possedere, e successivamente si mettono d'accordo per concludere lo scambio. Tutto ciò deve avvenire assicurando e controllando che nessuno dei due provi a ingannare l'altro.
+Uno dei casi d'uso che sono stati affrontati nella realizzazione di questo progetto, è quello relativo allo scambio tra NFT.
+
+Idealmente questo dovrebbe avvenire tra due account già presenti nel sistema, i quali selezionano gli NFT da scambiare, e che quindi devono necessariamente possedere, e successivamente si mettono d'accordo per concludere lo scambio. Tutto ciò deve avvenire assicurando e controllando che nessuno dei due provi a ingannare l'altro.
 
 Per conseguire l'obiettivo è stato necessario realizzare una transazione in Cadence che, una volta firmata e inviata, facesse rispettare queste necessità.
 
 \subsection{Implementazione}
 
 %CONTROLLA GLI IMPORT
-La realizzazione della transazione in questione, è caratterizzata dalla definizione che una volta firmata ed eseguita permetteva di ricoprire questo caso d'uso.
 
-Per prima cosa è necessario definire i parametri della transazione, associati agli id degli NFT che si vogliono scambiare:
+La realizzazione della transazione in quanto tale, ha richiesto di individuare quali sono i parametri formali e, in più, la necessaria definizione di 4 fasi della transazione stessa: \codeinline{prepare}, \codeinline{pre}, \codeinline{execute}, \codeinline{post}.
+
+Per prima cosa, quindi, sono stati definiti i parametri della transazione, cioè i valori relativi agli id degli NFT che devono essere scambiati:
 
 \begin{lstlisting}[style=all, style=cadence]
-transaction(idNFT1, idNFT2) {...}
+transaction(toSwapNFTid1: UInt64, toSwapNFTid2: UInt64) {...}
 \end{lstlisting}
 
-Successivamente, è stata definita la logica applicativa dello scambio, che è stato realizzato grazie allo statement \codeinline{prepare}, cui utilizzo è necessario poiché quando, tramite la Flow CLI, si vuole firmare la transazione, i firmatari della stessa vengono passati come suoi parametri, quindi questi account vengono utilizzati per accedere all'NFT associato. 
+Prima della logica applicativa dello scambio (descritta nello statement \codeinline{execute}), è richiesta l'acquisizione di tutto ciò che serve per definirne un'implementazione. 
 
-Per fare questo è stato necessario accedere alle collezioni degli account, per farlo è necessario accedervi tramite il path associato allo storage privato in cui la risorsa viene localizzata. In questo caso non è stato necessario l'utilizzo delle capability, poiché è possibile accedere alle risorse privare in sicurezza, grazie alla firma dei suoi proprietari.
+Questa fase è relativa allo statement \codeinline{prepare}, cui utilizzo è fondamentale poiché quando, tramite la Flow CLI, si vuole far firmare la transazione, i due firmatari vengono passati come suoi parametri. 
+
+Si noti che per la transazione in questione, a differenza di tante altre presenti nel progetto, è stato necessario aggirare una mancanza in Flow CLI: non è possibile far firmare una transazione da due accounts con il solo comando \codeinline{send}. Quindi è stato necessario, tramite uno script apposito, lanciare più comandi in cui si definivano, tramite flags, i parametri necessari per eseguire il build, la firma e l'invio di una transazione. Inoltre, nella fase di build si definiscono gli authorizers, che sono estrapolati dal \codeinline{prepare} per associarli agli AuthAccount passati come suoi parametri.
+
+Tutto questo infine, ha permesso, nello statement in questione, di prendere in prestito i riferimenti alle collezioni private di NFT dei firmatari tramite il metodo \codeinline{borrow} di \codeinline{AuthAccount}, ed eventualmente lanciare un errore runtime qualora non ve ne fosse una o entrambe (e.g. il setup dell'account potrebbe non essere stato fatto correttamente). 
+
+Grazie all'approccio adottato non è stato necessario l'utilizzo delle capabilities, poiché è possibile accedere, in sicurezza (poiché hanno firmato la transazione), alle risorse private degli account proprietari.
 
 %codice prepare
+\begin{lstlisting}[style=all, style=cadence]
+prepare(signer1: AuthAccount, signer2: AuthAccount){
+    self.swapRef1 = signer1.borrow<&DDDNFT.Collection>(from:DDDNFT.CollectionStoragePath) ?? panic("Account does not store an object at the specified path")
+    
+    self.swapRef2 = signer2.borrow<&DDDNFT.Collection>(from:DDDNFT.CollectionStoragePath) ?? panic("Account does not store an object at the specified path")
+}
+\end{lstlisting}
 
-Si noti che come suggerito da Flow, il prepare viene utilizzato per l'acqusizione di risorse che verranno poi utilizzate nel \codeinline{execute}. Prima di parlarne, è necessario parlare delle precondizioni che devono essere verificate prima che gli NFT siano scambiati, infatti è necessario per evitare problemi, di controllare che gli NFT cui id viene passato come parametro, devono essere posseduti da chi li vuole scambiare. Si noti quindi, che l'ordine dei parametri sia della transazione che del prepare è importante
+La fase successiva è quella delle precondizioni (\codeinline{pre}), utili per verificare che alcune condizioni, prima di eseguire la transazione, siano valide. In questo caso è fondamentale controllare che gli NFT da scambiare siano posseduti da chi li vuole scambiare. Ai fini di questo controllo, è da sottolineare l'importanza dell'ordine dei parametri sia nella transazione che nel prepare, di conseguenza bisogna fare particolare attenzione all'ordine con cui gli authorizers vengono passati al comando per il build della transazione.
 
+\newpage
 %codice pre
+\begin{lstlisting}[style=all, style=cadence]
+pre{
+    self.swapRef1.getIDs().contains(toSwapNFTid1): "Original owner(1) should have the NFT(1) before swapping it"
+    self.swapRef2.getIDs().contains(toSwapNFTid2): "Original owner(2) should have the NFT(2) before swapping it"
+}
+\end{lstlisting}
 
-%Controlla dove sta il ritiro della risorsa (se nel prepare o execute)
-Successivamente viene eseguito lo scambio degli NFT, reso possibile tramite l'acquisizione delle risorse tramite withdraw, metodo richiamato sul riferimento alla collezione che permette di ottenre come valore di ritorno la risorsa con l'id passata come parametro. Poi, la prima risorsa verrà depositata nella seconda collezione, ovvero quella del secondo account passato come parametro, mentre la seconda nella prima collezione.
+Successivamente, tramite la fase di esecuzione della transazione, gli NFT in questione vengono scambiati: si acquisice la risorsa tramite il metodo \codeinline{withdraw} (funzione richiamata sul riferimento alla collezione che permette di prelevare la risorsa con l'id passato come parametro) e l'NFT del primo firmatario verrà depositato nella collezione del secondo firmatario e viceversa.
 
 %codice execute
+\begin{lstlisting}[style=all, style=cadence]
+execute{
+    let nft1 <- self.swapRef1.withdraw(withdrawID: toSwapNFTid1)
+    let nft2 <- self.swapRef2.withdraw(withdrawID: toSwapNFTid2)
+    
+    self.swapRef1.deposit(token: <-nft2)
+    self.swapRef2.deposit(token: <-nft1)
+}
+\end{lstlisting}
 
-Infine, si eseguono ulteriori verifiche sul successo dello scambio appena avvenuto, semplicemente controllando che le risorse siano ora nelle giuste collezioni, quindi non si devono trovare in quelle originali, bensì in quelle corrette
+Infine, si eseguono ulteriori controlli per verificare il successo, o meno, dello scambio appena avvenuto, quindi si controlla che le risorse siano ora nelle corrette collezioni.
 
 %codice post
+\begin{lstlisting}[style=all, style=cadence]
+post{
+    !self.swapRef1.getIDs().contains(toSwapNFTid1): "Original owner(1) should not have the swapped NFT(1) anymore"
+    !self.swapRef2.getIDs().contains(toSwapNFTid2): "Original owner(2) should not have the swapped NFT(2) anymore"
+    self.swapRef1.getIDs().contains(toSwapNFTid2):"The reciever(1) should now own the NFT(2)"
+    self.swapRef2.getIDs().contains(toSwapNFTid1):"The reciever(2) should now own the NFT(1)"
+}
+\end{lstlisting}
 
 Per riassumere, la transazione in questione è la seguente:
 
 %codice tutta transazione
+\begin{lstlisting}[style=all, style=cadence]
+import DDDNFT from "../Contracts/DDDNFT.cdc"
 
-\textbf{RILEGGI STA SUPER BOZZA CHE FA SUPER CAGARE}
+transaction(toSwapNFTid1: UInt64, toSwapNFTid2: UInt64){
+
+    let swapRef1: &DDDNFT.Collection
+    let swapRef2: &DDDNFT.Collection
+
+    prepare(signer1: AuthAccount, signer2: AuthAccount){
+        self.swapRef1=signer1.borrow<&DDDNFT.Collection>(from:DDDNFT.CollectionStoragePath)                      ?? panic("Account does not store an object at the specified path")
+        self.swapRef2=signer2.borrow<&DDDNFT.Collection>(from:DDDNFT.CollectionStoragePath)                      ?? panic("Account does not store an object at the specified path")
+    }
+
+    pre{
+        self.swapRef1.getIDs().contains(toSwapNFTid1): "Original owner(1) should have the NFT(1) before swapping it"
+        self.swapRef2.getIDs().contains(toSwapNFTid2): "Original owner(2) should have the NFT(2) before swapping it"
+    }
+
+    execute{
+        let nft1 <- self.swapRef1.withdraw(withdrawID: toSwapNFTid1)
+        let nft2 <- self.swapRef2.withdraw(withdrawID: toSwapNFTid2)
+
+        self.swapRef1.deposit(token: <-nft2)
+        self.swapRef2.deposit(token: <-nft1)
+    }
+
+    post{
+        !self.swapRef1.getIDs().contains(toSwapNFTid1): "Original owner(1) should not have the swapped NFT(1) anymore"
+        !self.swapRef2.getIDs().contains(toSwapNFTid2): "Original owner(2) should not have the swapped NFT(2) anymore"
+        self.swapRef1.getIDs().contains(toSwapNFTid2): "The reciever(1) should now own the NFT(2)"
+        self.swapRef2.getIDs().contains(toSwapNFTid1): "The reciever(2) should now own the NFT(1)"
+    }
+}
+    
+\end{lstlisting}
+
+%Test per vedere correttezza
+Per verificarne la correttezza, sono stati eseguiti due tipi di test:
+
+\begin{itemize}
+    \item Scambio di NFT tra due account che possiedono solo gli NFT da scambiare
+    \item Scambio di NFT tra due account che possiedono più NFT
+\end{itemize}
+
+Nessuna ambiguità è stata riscontrata a favore di un corretto funzionamento della transazione in questione.
