@@ -30,18 +30,23 @@ transaction(tokenID: UInt64, saleCollectionAddress: Address) {
     let temporaryVault: @FungibleToken.Vault
 
     prepare(acct: AuthAccount){
+        // gets or creates the capability for the purchaser collection
         self.collectionCapability = getOrCreateCollectionCapability(account: acct)
 
+        // gets the capability for the seller SaleCollection
         self.saleCollection = getAccount(saleCollectionAddress)
                             .getCapability<&DDDMarketplace.SaleCollection{DDDMarketplace.SalePublic}>
                             (DDDMarketplace.SaleCollectionPublicPath).borrow()
                             ?? panic("Could not borrow SaleCollection from provided address")
 
+        // gets the price of the token in the SaleCollection
         let price = self.saleCollection.idPrice(tokenID: tokenID)
                     ?? panic("No token found with that tokeID")
 
+        // gets the capability for the purchaser vault
         let vaultref = acct.borrow<&FlowToken.Vault>(from: FlowToken.VaultStoragePath)
             ?? panic("Couldn't borrow owner's vault")
+        // creates a vault with the aumount of money equal to the token price
         self.temporaryVault <- vaultref.withdraw(amount: price)
     }
 
