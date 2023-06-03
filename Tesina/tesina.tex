@@ -1,0 +1,161 @@
+% Classe appositamente creata per tesi di Ingegneria Informatica all'università Roma Tre
+\documentclass{TesiDiaUniroma3}
+% --- INIZIO dati relativi al template TesiDiaUniroma3
+% dati obbligatori, necessari al frontespizio
+\titolo{Creazione, scambio, vendita e logica di NFT sulla blockchain Flow}
+\autoreprimo{Davide Galletti}
+\matricolaprima{533152}
+\autoresecondo{Davide Gattini}
+\matricolaseconda{540202}
+\autoreterzo{Davide Molitierno}
+\matricolaterza{537969}
+\github{https://github.com/DDDavides/CSProj}
+% --- FINE dati relativi al template TesiDiaUniroma3
+
+% --- INIZIO richiamo di pacchetti di utilità. Questi sono un esempio e non sono strettamente necessari al modello per la tesi.
+\usepackage[plainpages=false]{hyperref}	% generazione di collegamenti ipertestuali su indice e riferimenti
+\usepackage[all]{hypcap} % per far si che i link ipertestuali alle immagini puntino all'inizio delle stesse e non alla didascalia sottostante
+\usepackage{amsthm}	% per definizioni e teoremi
+\usepackage{amsmath}	% per ``cases'' environment
+% --- FINE richiamo di pacchetti di utilità
+
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{listings} % per scrittura di codice
+% \setlength{\tabcolsep}{5pt} % Default value: 6pt
+\renewcommand{\arraystretch}{1.3} % Default value: 1
+
+\definecolor{bluegray}{rgb}{0.4, 0.6, 0.8}
+\definecolor{coolblack}{rgb}{0.0, 0.18, 0.39}
+
+\definecolor{BrickRed}{HTML}{B6321C}
+\definecolor{Peach}{HTML}{F7965A}
+\definecolor{ForestGreen}{HTML}{009B55}
+\definecolor{Blue}{HTML}{0099FF}
+
+\definecolor{InlineGray}{HTML}{E3E3E3}
+
+
+% this style should be active for all lstlistings environments
+\lstdefinestyle{all}{
+  % columns=flexible,
+  tabsize=1,
+  columns=fixed,
+  keepspaces=true,
+  frameshape={}{y}{}{}, % per rimuovere la linea vericale sulla sinistra `frameshape={}{}{}{}`
+  basicstyle = {\small\ttfamily \color{black}},
+  showstringspaces=false,
+  rulecolor=\color{black},
+  numberstyle=\tiny\color{lightgray}
+}
+
+\lstdefinestyle{inline}{
+  basicstyle={\small\ttfamily \color{black}},
+  columns=fixed,
+  showstringspaces=false,
+}
+
+\lstdefinestyle{bash}{
+    frame=l,
+    captionpos=b,
+    tabsize=4,
+    breaklines=true,
+    showstringspaces=false,
+    numbers=left,
+    upquote=true,
+    classoffset=0,
+    escapechar=\&,
+    morekeywords=[1]{,flow,echo,},
+    morekeywords=[2]{,transactions,accounts,project,deploy,},
+    morestring=*[d]{"},
+    morestring=[s][\color{blue}]{\$\{}{\}},
+    commentstyle=\itshape\color{blue},
+    stringstyle=\color{Peach},
+    keywordstyle=[1]\color{Peach},
+    keywordstyle=[2]\color{Blue},
+      %   literate=%
+      % {+}{{{\color{red}+}}}1
+      % {-}{{{\color{red}-}}}1
+      % {*}{{{\color{red}*}}}1
+      % {/}{{{\color{red}/}}}1
+      % {?}{{{\color{red}?}}}1
+      % {>}{{{\color{red}>}}}1
+      % {<}{{{\color{red}<}}}1
+      % {=}{{{\color{red}=}}}1,
+}
+\lstdefinestyle{cadence}{
+    frame=l,
+    captionpos=b,
+    tabsize=4,
+    breaklines=true,
+    showstringspaces=false,
+    numbers=left,
+    upquote=true,
+    classoffset=0,
+    escapechar=\&,
+    morekeywords=[1]{,pub,emit,pre,pos,execute,return,create,import,from,}, % Python builtin
+    morekeywords=[2]{,contract,resource,interface,access,let,}, % Python builtin
+    % morekeywords=[3]{,open,close,write,}, % Python builtin
+    morestring=*[d]{"},
+    stringstyle=\color{BrickRed},
+    keywordstyle=[1]\color{blue},
+    keywordstyle=[2]\color{blue},
+    literate=%
+      {+}{{{\color{red}+}}}1
+      {-}{{{\color{red}-}}}1
+      {*}{{{\color{red}*}}}1
+      {_/}{{{\color{red}/}}}1
+      {?}{{{\color{red}?}}}1
+      {>}{{{\color{red}>}}}1
+      {<}{{{\color{red}<}}}1
+      {=}{{{\color{red}=}}}1
+      % {??}{{{\color{red} ?? }}}1
+      {>=}{{{\color{red} >= }}}1
+      {<=}{{{\color{red} <= }}}1
+      {!=}{{{\color{red} != }}}1
+      {<-}{{{\color{red} <- }}}1
+      {<<}{{{\color{red} << }}}1
+      {>>}{{{\color{red} >> }}}1,
+    morecomment=[f][\color{ForestGreen}][0]{//},
+    commentstyle=\itshape{\color{ForestGreen}},
+}
+
+\tcbset{on line, 
+        boxsep=2pt, left=0pt,right=0pt,top=0pt,bottom=0pt,
+        colframe=white,colback=InlineGray,
+}
+\newcommand{\codeinline}[1]{\tcbox{\lstinline[style=inline]|#1|}}
+
+\hypersetup{
+    plainpages=false,
+    hidelinks,
+    colorlinks=true,
+    urlcolor={coolblack},
+    linkcolor={black},
+    citecolor={coolblack}
+}
+
+\begin{document}
+% ----- Pagine di fronespizio, numerate in romano (i,ii,iii,iv...) (obbligatorio)
+\frontmatter
+\generaFrontespizio
+\introduzione{capitoli/abstract}
+\generaIndice
+\generaIndiceFigure
+
+% ----- Pagine di tesi, numerate in arabo (1,2,3,4,...) (obbligatorio)
+\mainmatter
+% il comando ``capitolo'' ha come parametri:
+% 1) il titolo del capitolo
+% 2) il nome del file tex (senza estensione) che contiene il capitolo. Tale nome \`e usato anche come label del capitolo
+% \sezione{Nome sezione}{sez1}
+\capitolo{Background}{capitoli/background}
+\capitolo{Flow}{capitoli/flow}
+\capitolo{Implementazione}{capitoli/implementazione}
+
+% Bibliografia con BibTeX (obbligatoria)
+% Non si deve specificare lo stile della bibliografia
+\bibliography{bibliografia} % inserisce la bibliografia e la prende in questo caso da bibliografia.bib
+
+\end{document}

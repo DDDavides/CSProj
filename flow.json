@@ -17,7 +17,11 @@
 	"accounts": {
 		"Alice": {
 			"address": "01cf0e2f2f715450",
-			"key": "d8ccc4ddfcbdde6d5d2bb8af4fa2c101a98b90d4355cb7e39cbdf297ebc37fcb"
+			"key": "2ebece1ab97122253a56c0aebb39454b7e2fee2596bdec80c48e693eb194f74c"
+		},
+		"Bob": {
+			"address": "179b6b1cb6755e31",
+			"key": "0485c5230ca335f2516a8a422791971513139539f83879ae57ad81a0ba85f66c"
 		},
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
@@ -38,3 +42,4 @@
 		}
 	}
 }
+ 

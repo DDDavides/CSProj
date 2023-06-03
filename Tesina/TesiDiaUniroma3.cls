@@ -71,29 +71,20 @@
       \vspace{15mm}
       {\LARGE Progetto Cybersecurity} \\
       \vspace{15mm}
-      {\huge \@titolo} \\
+      {\Huge \@titolo} \\
       \vspace{15mm}
-      % {\begin{table}[h!]
-      % \centering
-      %     \begin{tabular}{ccc}
-      %          \textbf{\@autoreprimo} & \textbf{\@autoresecondo} & \textbf{\@autoreterzo} \\
-      %           Matricola \@matricolaprima & Matricola \@matricolaseconda & Matricola \@matricolaterza
-      %     \end{tabular}
-      % \end{table}}
       \begin{tabular}{c c c}
        \textbf{\@autoreprimo} & \textbf{\@autoresecondo} & \textbf{\@autoreterzo} \\
        Matricola \@matricolaprima & Matricola \@matricolaseconda & Matricola \@matricolaterza \\
-     \end{tabular} \\
-      \vspace{15mm}
-      % \vfill
+      \end{tabular} \\
+      \vspace{7mm}
       {\begin{figure}[h]
         \centering
             \begin{tabular}{m{1cm}c}
-            \includegraphics[scale=0.01]{tesina/img/GitHub-logo.png} & \@github\\
+            \includegraphics[scale=0.01]{img/GitHub-logo.png} & \@github\\
             \end{tabular}
        \end{figure}
-      } \\
-      \vspace{7mm}
+      }
       \vfill
       {\large \today} \\
    \end{center}
@@ -102,8 +93,8 @@
 
 % Comandi riguardanti l'inserimento di capitoli
 \newcommand{\introduzione}[1]{\newpage \chapter{Abstract} \input{#1}}
-\newcommand{\capitolo}[2]{\newpage \chapter{#1}\label{cap:#2}\input{#2}}
-\newcommand{\sezione}[2]{\section{#1}\label{sez:#2}\input{#2}}
+\newcommand{\capitolo}[2]{\newpage \chapter{#1}\label{cap:#1}\input{#2}}
+\newcommand{\sezione}[2]{\section{#1}\label{sez:#1}\input{#2}}
 
 % Comandi riguardanti la generazione di indici
 \newcommand{\generaIndice}{
