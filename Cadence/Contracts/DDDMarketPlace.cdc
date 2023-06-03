@@ -125,3 +125,4 @@ pub contract DDDMarketplace {
         self.SaleCollectionPublicPath = /public/SaleCollection
     }
 }
+ 
